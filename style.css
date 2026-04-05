@@ -1,0 +1,265 @@
+/* =========================================
+   HỆ THỐNG BIẾN TOÀN CỤC (DESIGN TOKENS)
+   ========================================= */
+   :root {
+    /* Bảng màu chủ đạo */
+    --bg-color: #F1F5F9;         /* Xám xanh cực nhạt, tạo cảm giác sang trọng */
+    --card-bg: #FFFFFF;          /* Nền thẻ màu trắng thuần */
+    --text-main: #1E293B;        /* Xám Slate đậm, dễ đọc, không gắt như đen thuần */
+    --text-muted: #64748B;       /* Xám Slate nhạt cho chữ phụ */
+    
+    /* Màu tương tác */
+    --primary-color: #3B82F6;    /* Xanh Blue hiện đại */
+    --primary-hover: #2563EB;
+    --primary-light: #EFF6FF;    /* Xanh nhạt cho background hover */
+    --success-color: #10B981;    /* Xanh ngọc mượt mà */
+    
+    /* IDE & Terminal */
+    --border-color: #E2E8F0;
+    --terminal-bg: #0F172A;      /* Đen nhám sâu thẳm */
+    --terminal-header: #1E293B;
+    --terminal-text: #22C55E;    /* Xanh lá Terminal */
+    
+    /* Đổ bóng & Bo góc (Tạo chiều sâu cho UI) */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025);
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+}
+
+/* =========================================
+   RESET & CƠ BẢN
+   ========================================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Tùy chỉnh thanh cuộn (Scrollbar) cho đẹp mắt */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+/* Các lớp Tiện ích (Utilities) */
+.hidden { display: none !important; }
+.active { display: block; }
+
+/* =========================================
+   NÚT BẤM (BUTTONS) & INPUTS
+   ========================================= */
+button { 
+    cursor: pointer; font-family: 'Inter', sans-serif; 
+    border-radius: var(--radius-md); font-weight: 600; 
+    transition: all 0.2s ease; font-size: 0.95rem;
+}
+
+.btn-primary { 
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover)); 
+    color: white; border: none; padding: 12px 24px; 
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+.btn-primary:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4); 
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-outline { 
+    background: transparent; color: var(--text-main); 
+    border: 1.5px solid var(--border-color); padding: 10px 20px; 
+}
+.btn-outline:hover { 
+    background: var(--primary-light); 
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-back { background: transparent; border: none; color: var(--text-muted); margin-bottom: 20px; padding: 0; display: inline-flex; align-items: center; gap: 5px; font-weight: 500;}
+.btn-back:hover { color: var(--primary-color); transform: translateX(-3px); }
+
+input, select {
+    width: 100%; padding: 14px 16px; margin: 10px 0 20px 0; 
+    border: 1.5px solid var(--border-color); border-radius: var(--radius-md); 
+    font-size: 1rem; color: var(--text-main); background-color: #F8FAFC;
+    transition: all 0.2s ease; font-family: 'Inter', sans-serif;
+}
+input:focus, select:focus {
+    outline: none; background-color: #FFF;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+/* =========================================
+   HEADER CHÍNH
+   ========================================= */
+.main-header {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 15px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky; top: 0; z-index: 100;
+}
+.logo { font-size: 1.4rem; font-weight: 800; color: var(--primary-color); letter-spacing: -0.5px; }
+#user-nav { display: flex; align-items: center; gap: 20px; font-weight: 500; }
+
+/* =========================================
+   MÀN HÌNH XÁC THỰC (AUTH)
+   ========================================= */
+#view-auth { height: calc(100vh - 70px); display: flex; align-items: center; justify-content: center; }
+.auth-card {
+    background: var(--card-bg); padding: 40px; border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg); width: 100%; max-width: 420px;
+}
+.auth-card h2 { margin-bottom: 10px; color: var(--text-main); font-weight: 700; font-size: 1.5rem; text-align: center; }
+
+/* Tabs Đăng nhập / Đăng ký */
+.auth-tabs { display: flex; margin-bottom: 30px; background: #F1F5F9; border-radius: var(--radius-md); padding: 5px; }
+.tab-btn { 
+    flex: 1; background: transparent; border: none; padding: 10px; 
+    font-size: 0.95rem; color: var(--text-muted); border-radius: 6px; 
+}
+.tab-btn.active { 
+    background: #FFF; color: var(--primary-color); 
+    font-weight: 700; box-shadow: var(--shadow-sm); 
+}
+.auth-form { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* =========================================
+   DASHBOARD
+   ========================================= */
+.dashboard-container { max-width: 900px; margin: 40px auto; display: grid; gap: 25px; padding: 0 20px; }
+
+.profile-card, .recommendation-card {
+    background: var(--card-bg); padding: 30px; border-radius: var(--radius-lg); 
+    box-shadow: var(--shadow-md); border: 1px solid rgba(0,0,0,0.02);
+}
+
+/* Thanh Tiến Độ (Progress Bar) Đẹp Mắt */
+.progress-bar { 
+    width: 100%; height: 12px; background: #E2E8F0; 
+    border-radius: 20px; margin: 15px 0; overflow: hidden; 
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+.progress-fill { 
+    height: 100%; width: 0%; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(90deg, #3B82F6, #60A5FA); 
+    border-radius: 20px;
+}
+
+/* Thẻ Bài Học */
+.lesson-card {
+    border: 1px solid var(--border-color); padding: 20px; border-radius: var(--radius-md); 
+    margin-top: 20px; display: flex; justify-content: space-between; align-items: center;
+    background: #FAFAFA; transition: all 0.2s ease;
+}
+.lesson-card:hover { 
+    border-color: var(--primary-color); background: #FFF;
+    box-shadow: var(--shadow-md); transform: translateY(-2px); 
+}
+
+/* =========================================
+   WORKSPACE (IDE / HỌC TẬP)
+   ========================================= */
+.workspace-container { display: flex; height: calc(100vh - 66px); }
+
+/* Nửa trái: Lý thuyết */
+.lesson-panel { 
+    width: 45%; padding: 40px; overflow-y: auto; 
+    border-right: 1px solid var(--border-color); background: var(--card-bg); 
+}
+#lesson-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+.content-text { font-size: 1.05rem; color: var(--text-main); }
+.content-text h3 { margin: 20px 0 10px 0; color: var(--primary-color); }
+.content-text code { 
+    background: #F1F5F9; color: #E11D48; padding: 3px 6px; 
+    border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.9em; 
+}
+
+.task-box { 
+    background: var(--primary-light); border-left: 5px solid var(--primary-color); 
+    padding: 20px; margin-top: 30px; border-radius: 0 var(--radius-md) var(--radius-md) 0; 
+}
+
+/* Nửa phải: Editor */
+.ide-panel { width: 55%; display: flex; flex-direction: column; background: var(--terminal-bg); }
+
+.ide-toolbar { 
+    background: var(--terminal-header); padding: 12px 20px; 
+    display: flex; justify-content: space-between; align-items: center; 
+    border-bottom: 1px solid #334155; 
+}
+.ide-toolbar .file-name { 
+    color: #94A3B8; font-family: 'Fira Code', monospace; font-size: 0.9rem; 
+    background: #334155; padding: 4px 12px; border-radius: 4px;
+}
+.ide-toolbar .btn-outline { color: #E2E8F0; border-color: #475569; }
+.ide-toolbar .btn-outline:hover { background: #334155; color: #FFF; }
+
+/* Vùng CodeMirror (Ghi đè thư viện) */
+#editor-wrapper { position: relative; flex-grow: 1; display: flex; flex-direction: column; }
+.CodeMirror { flex-grow: 1; height: auto !important; font-family: 'Fira Code', monospace; font-size: 15px; background: transparent !important; }
+
+/* Lớp phủ Khóa Editor */
+.locked-editor .CodeMirror { filter: blur(4px); pointer-events: none; user-select: none; }
+.editor-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(2px); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 500; z-index: 10; text-align: center; padding: 20px; display: none;
+}
+.locked-editor .editor-overlay { display: flex; }
+
+/* Terminal */
+.terminal { height: 250px; background: var(--terminal-bg); border-top: 2px solid #334155; display: flex; flex-direction: column; }
+.terminal-header { 
+    background: #0B1120; color: #64748B; padding: 8px 20px; 
+    font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 700;
+}
+#terminal-output { 
+    padding: 20px; color: var(--terminal-text); font-family: 'Fira Code', monospace; 
+    font-size: 0.95rem; flex-grow: 1; overflow-y: auto; margin: 0; white-space: pre-wrap; 
+}
+/* =========================================
+   CẬP NHẬT GIAO DIỆN DASHBOARD MULTI-TRACK
+   ========================================= */
+.tracks-list { display: flex; flex-direction: column; gap: 25px; padding-bottom: 40px; }
+
+.track-card { 
+    background: var(--card-bg); padding: 25px 30px; 
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-md); 
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.track-card:hover { 
+    transform: translateY(-3px); 
+    box-shadow: var(--shadow-lg); 
+    border-color: #CBD5E1;
+}
+
+.track-header { 
+    display: flex; justify-content: space-between; align-items: center; 
+    border-bottom: 1px solid var(--border-color); 
+    padding-bottom: 15px; margin-bottom: 20px; 
+}
+.track-title { font-size: 1.5rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+
+/* Các huy hiệu (Badge) thống kê */
+.track-stats { display: flex; gap: 12px; font-size: 0.9rem; font-weight: 600; flex-wrap: wrap; }
+.stat-badge { background: #F1F5F9; padding: 6px 12px; border-radius: 8px; color: var(--text-main); display: flex; align-items: center; gap: 5px;}
+.stat-level { background: #EFF6FF; color: var(--primary-color); }
+.stat-error { background: #FEF2F2; color: #EF4444; border: 1px solid #FECACA; } /* Nổi bật phần Lỗi */
+
+.track-body { display: flex; flex-direction: column; }
+.track-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+.lesson-info { font-size: 1.05rem; color: var(--text-main); }
+.lesson-info strong { color: var(--text-muted); font-size: 0.95rem; display: block; margin-bottom: 5px; }

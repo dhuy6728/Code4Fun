@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code4Students - Nền tảng học lập trình</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">🚀 Code4Students</div>
+        <nav id="user-nav" class="hidden">
+            <span id="user-greeting">Chào, User</span>
+            <button onclick="logout()" class="btn-outline">Đăng xuất</button>
+        </nav>
+    </header>
+
+    <section id="view-auth" class="view-section active">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button id="tab-login" class="tab-btn active" onclick="switchAuthTab('login')">Đăng nhập</button>
+                <button id="tab-register" class="tab-btn" onclick="switchAuthTab('register')">Đăng ký</button>
+            </div>
+
+            <div id="form-login" class="auth-form active">
+                <h2>Mừng trở lại!</h2>
+                <input type="email" id="login-email" placeholder="Email của bạn">
+                <input type="password" id="login-password" placeholder="Mật khẩu">
+                <button onclick="login()" class="btn-primary">Đăng nhập</button>
+            </div>
+
+            <div id="form-register" class="auth-form hidden">
+                <h2>Tạo tài khoản mới</h2>
+                <input type="text" id="reg-name" placeholder="Tên hiển thị">
+                <input type="email" id="reg-email" placeholder="Email">
+                <input type="password" id="reg-password" placeholder="Mật khẩu">
+                <button onclick="register()" class="btn-primary">Đăng ký ngay</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="view-dashboard" class="view-section hidden">
+        <div class="dashboard-container">
+            <div class="dashboard-header" style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 1.8rem; color: var(--text-main);">Lộ trình học tập của bạn</h2>
+                <p style="color: var(--text-muted);">Cuộn để chọn ngôn ngữ lập trình bạn muốn chinh phục hôm nay</p>
+            </div>
+            
+            <div id="language-tracks-container" class="tracks-list"></div>
+        </div>
+    </section>
+
+    <section id="view-workspace" class="view-section hidden">
+        <div class="workspace-container">
+            <div class="lesson-panel">
+                <button onclick="showView('view-dashboard')" class="btn-back">⬅ Quay lại Dashboard</button>
+                <h2 id="lesson-title">Tiêu đề bài học</h2>
+                
+                <div id="theory-section">
+                    <div id="lesson-theory" class="content-text">Nội dung...</div>
+                    <button onclick="startPracticeMode()" class="btn-primary" style="margin-top: 20px; width: 100%;">Tiếp tục: Bắt đầu thực hành ➡</button>
+                </div>
+
+                <div id="practice-section" class="hidden">
+                    <div class="task-box">
+                        <strong>🎯 Nhiệm vụ của bạn:</strong>
+                        <p id="lesson-task">Yêu cầu bài tập...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ide-panel">
+                <div class="ide-toolbar">
+                    <span id="file-name" class="file-name">main.js</span>
+                    <div>
+                        <button onclick="runCode()" class="btn-outline">Chạy thử (Run)</button>
+                        <button id="btn-submit" onclick="submitCode()" class="btn-primary hidden">Nộp bài (Submit)</button>
+                    </div>
+                </div>
+                
+                <div id="editor-wrapper" class="locked-editor">
+                    <textarea id="code-editor"></textarea>
+                    <div id="editor-overlay" class="editor-overlay">Hãy đọc kỹ hướng dẫn bên trái và ấn "Tiếp tục" trước khi viết code nhé!</div>
+                </div>
+                
+                <div class="terminal">
+                    <div class="terminal-header">Terminal Output</div>
+                    <pre id="terminal-output">Ready...</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
