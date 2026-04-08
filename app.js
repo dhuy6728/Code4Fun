@@ -147,7 +147,8 @@ const lessonsDB = {
 // ==========================================
 // 2. CƠ CHẾ TRẮC NGHIỆM - MULTIPLE CHOICE QUIZ
 // ==========================================
-const quizDB = {
+// quizDB (50 câu hỏi cho mỗi ngôn ngữ) được import từ quiz-data.js
+const quizDB_old = {
     javascript: [
         { q: "Câu lệnh nào dùng để in dữ liệu ra console?", a: ["console.log()", "print()", "cout", "System.out.println()"], c: 0 },
         { q: "Khai báo biến trong JS, cái nào được dùng nhiều nhất hiện đại?", a: ["var age = 25", "let age = 25", "const age = 25", "cả B và C đều đúng"], c: 3 },
@@ -227,7 +228,90 @@ let currentLangWorkspace = null;
 let currentLessonId = null;
 let editor;
 
-window.onload = () => {
+// ==========================================
+// 4. CÁC HÀM XỬ LÝ LỊCH SỬ TRẮC NGHIỆM
+// ==========================================
+
+function saveQuizHistory(lang, score, correct, incorrect) {
+    if (!currentUser.quizHistory) currentUser.quizHistory = {};
+    if (!currentUser.quizHistory[lang]) currentUser.quizHistory[lang] = [];
+    
+    const historyRecord = {
+        date: new Date().toISOString(),
+        score: score,
+        correct: correct,
+        incorrect: incorrect,
+        percentage: Math.round((correct / (correct + incorrect)) * 100),
+        expEarned: score
+    };
+    
+    currentUser.quizHistory[lang].push(historyRecord);
+    saveUserProgress();
+}
+
+function loadQuizHistory(lang) {
+    if (!currentUser.quizHistory) return [];
+    return currentUser.quizHistory[lang] || [];
+}
+
+function displayQuizHistory() {
+    const historyContainer = document.getElementById('history-list');
+    const selectedLang = filteredHistoryLang || 'all';
+    
+    let allHistory = [];
+    if (selectedLang === 'all') {
+        for (const lang in currentUser.quizHistory || {}) {
+            const records = currentUser.quizHistory[lang] || [];
+            records.forEach(record => {
+                allHistory.push({ ...record, lang: lang });
+            });
+        }
+    } else {
+        const records = currentUser.quizHistory?.[selectedLang] || [];
+        records.forEach(record => {
+            allHistory.push({ ...record, lang: selectedLang });
+        });
+    }
+    
+    // Sắp xếp theo ngày mới nhất trước
+    allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    if (allHistory.length === 0) {
+        historyContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px;">Chưa có lịch sử trắc nghiệm</p>';
+        return;
+    }
+    
+    historyContainer.innerHTML = allHistory.map((record, index) => {
+        const date = new Date(record.date);
+        const dateStr = date.toLocaleDateString('vi-VN') + ' ' + date.toLocaleTimeString('vi-VN');
+        const langMap = { javascript: 'JavaScript', python: 'Python', cpp: 'C++', java: 'Java', csharp: 'C#' };
+        
+        return `
+            <div class="history-card">
+                <div class="history-header">
+                    <span class="history-lang">${langMap[record.lang]}</span>
+                    <span class="history-date">${dateStr}</span>
+                </div>
+                <div class="history-score">
+                    <div class="score-big">${record.percentage}%</div>
+                    <div class="score-details">${record.correct}/${record.correct + record.incorrect} câu đúng</div>
+                </div>
+                <div class="history-exp">+${record.expEarned} EXP</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function filterQuizHistory() {
+    const filterSelect = document.getElementById('history-filter');
+    filteredHistoryLang = filterSelect.value === 'all' ? '' : filterSelect.value;
+    displayQuizHistory();
+}
+
+// ==========================================
+// 5. QUẢN LÝ BIẾN VÀ KHỞI ĐỘNG
+// ==========================================
+
     editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
         theme: "dracula", lineNumbers: true, autoCloseBrackets: true
     });
@@ -254,9 +338,13 @@ function showView(viewId) {
 
 function checkAndInitStats() {
     if (!currentUser.stats) currentUser.stats = {};
+    if (!currentUser.quizHistory) currentUser.quizHistory = {};
     for (const lang in lessonsDB) {
         if (!currentUser.stats[lang]) {
             currentUser.stats[lang] = { exp: 0, completedLessons: [], errors: 0 };
+        }
+        if (!currentUser.quizHistory[lang]) {
+            currentUser.quizHistory[lang] = [];
         }
     }
 }
@@ -625,6 +713,20 @@ function showQuizResult() {
 }
 
 function finishQuiz() {
+    // Lưu lịch sử trắc nghiệm
+    saveQuizHistory(quizState.currentLang, quizState.correct * 20, quizState.correct, quizState.incorrect);
+    
+    // Reset lại bộ câu hỏi
+    quizState = {
+        currentLang: null,
+        questions: [],
+        currentIndex: 0,
+        usedQuestions: new Set(),
+        correct: 0,
+        incorrect: 0,
+        correctQuestions: []
+    };
+    
     showView('view-dashboard');
     updateDashboard();
 }

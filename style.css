@@ -111,6 +111,7 @@ input:focus, select:focus {
 .logo { font-size: 1.4rem; font-weight: 800; color: var(--primary-color); letter-spacing: -0.5px; cursor: pointer; transition: all 0.3s ease; user-select: none; }
 .logo:hover { transform: scale(1.05); opacity: 0.8; }
 #user-nav { display: flex; align-items: center; gap: 20px; font-weight: 500; }
+#user-nav button { padding: 8px 16px; font-size: 0.95rem; }
 
 /* =========================================
    MÀN HÌNH XÁC THỰC (AUTH)
@@ -389,5 +390,135 @@ input:focus, select:focus {
     
     #result-message {
         font-size: 1rem;
+    }
+}
+
+/* =========================================
+   LỊCH SỬ TRẮC NGHIỆM (QUIZ HISTORY)
+   ========================================= */
+#view-quiz-history {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+#view-quiz-history h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 30px;
+    color: var(--text-main);
+}
+
+.history-filter-container {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.history-filter-container label {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+#history-filter {
+    min-width: 200px;
+}
+
+#history-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.history-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.history-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.history-lang {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+    background: var(--primary-light);
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.history-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.history-score {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.score-big {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+}
+
+.score-details {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+.history-exp {
+    text-align: center;
+    font-weight: 700;
+    color: var(--success-color);
+    font-size: 1.1rem;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    #view-quiz-history {
+        padding: 20px;
+    }
+    
+    #view-quiz-history h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+    
+    .history-filter-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    #history-filter {
+        width: 100%;
+    }
+    
+    #history-list {
+        grid-template-columns: 1fr;
     }
 }

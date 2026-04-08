@@ -16,6 +16,7 @@
         <div class="logo" onclick="goHome()" style="cursor: pointer; transition: transform 0.2s ease;">🚀 Code4Students</div>
         <nav id="user-nav" class="hidden">
             <span id="user-greeting">Chào, User</span>
+            <button onclick="showView('view-quiz-history'); displayQuizHistory();" class="btn-outline">📊 Lịch Sử</button>
             <button onclick="logout()" class="btn-outline">Đăng xuất</button>
         </nav>
     </header>
@@ -123,6 +124,35 @@
         </div>
     </section>
 
+    <section id="view-quiz-history" class="view-section hidden">
+        <div class="dashboard-container">
+            <button onclick="showView('view-dashboard')" class="btn-back">⬅ Quay lại Dashboard</button>
+            
+            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;">📚 Lịch Sử Học Tập</h1>
+                    <p style="color: var(--text-muted);">Xem lại tất cả các lần quiz bạn đã làm</p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="font-weight: 600; color: var(--text-main);">Lọc theo ngôn ngữ:</label>
+                    <select id="history-filter" onchange="filterQuizHistory()" style="padding: 10px; margin-left: 10px; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
+                        <option value="">Tất cả ngôn ngữ</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="cpp">C++</option>
+                        <option value="java">Java</option>
+                        <option value="csharp">C#</option>
+                    </select>
+                </div>
+
+                <div id="history-list" style="display: grid; gap: 15px;">
+                    <p style="color: var(--text-muted); text-align: center; padding: 40px;">Chưa có lịch sử quiz. Hãy bắt đầu làm quiz ngay!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="view-workspace" class="view-section hidden">
         <div class="workspace-container">
             <div class="lesson-panel">
@@ -182,6 +212,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+    <script src="quiz-data.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
