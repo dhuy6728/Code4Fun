@@ -44,6 +44,39 @@
         </div>
     </section>
 
+    <section id="view-language-overview" class="view-section hidden">
+        <div class="dashboard-container">
+            <button onclick="showView('view-dashboard')" class="btn-back">⬅ Quay lại Dashboard</button>
+            
+            <div id="language-overview-content" style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h1 id="lang-overview-title" style="font-size: 2.2rem; margin-bottom: 10px; color: var(--primary-color);"></h1>
+                <p id="lang-overview-description" style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 20px;"></p>
+                
+                <div style="background: var(--primary-light); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                    <h3 style="color: var(--text-main); margin-bottom: 10px;">📖 Tổng Quan</h3>
+                    <p id="lang-overview-text" style="line-height: 1.8; color: var(--text-main);"></p>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: var(--text-main); margin-bottom: 15px;">🚀 Ứng Dụng & Công Dụng</h3>
+                    <div id="lang-use-cases" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;"></div>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: var(--text-main); margin-bottom: 10px;">⚡ Đặc Điểm</h3>
+                    <p id="lang-features" style="background: #f0f4f8; padding: 15px; border-radius: 8px; color: var(--text-main);"></p>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: var(--text-main); margin-bottom: 10px;">💻 Cách Cài Đặt & Chạy</h3>
+                    <p id="lang-install-guide" style="background: #f0f4f8; padding: 15px; border-radius: 8px; color: var(--text-main); font-family: 'Fira Code', monospace;"></p>
+                </div>
+                
+                <button id="btn-start-learning" onclick="" class="btn-primary" style="width: 100%; padding: 15px; font-size: 1.1rem;">Bắt Đầu Học Ngay 🚀</button>
+            </div>
+        </div>
+    </section>
+
     <section id="view-dashboard" class="view-section hidden">
         <div class="dashboard-container">
             <div class="dashboard-header" style="text-align: center; margin-bottom: 30px;">
@@ -62,7 +95,21 @@
                 <h2 id="lesson-title">Tiêu đề bài học</h2>
                 
                 <div id="theory-section">
-                    <div id="lesson-theory" class="content-text">Nội dung...</div>
+                    <div style="background: var(--primary-light); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                        <h3 style="color: var(--primary-color); margin-bottom: 10px;">📚 Lý Thuyết</h3>
+                        <div id="lesson-theory" class="content-text" style="color: var(--text-main); line-height: 1.8;">Nội dung...</div>
+                    </div>
+                    
+                    <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #ffc107;">
+                        <h4 style="color: #856404; margin-bottom: 10px;">💡 Gợi Ý</h4>
+                        <p id="lesson-hints" style="color: #856404; margin: 0;">Hãy đọc kỹ lý thuyết ở trên...</p>
+                    </div>
+                    
+                    <div style="background: #d1ecf1; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #17a2b8;">
+                        <h4 style="color: #0c5460; margin-bottom: 10px;">📝 Ví Dụ</h4>
+                        <pre id="lesson-examples" style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto; color: #0c5460; margin: 0; font-family: 'Fira Code', monospace; font-size: 0.9rem;">Xem ví dụ...</pre>
+                    </div>
+                    
                     <button onclick="startPracticeMode()" class="btn-primary" style="margin-top: 20px; width: 100%;">Tiếp tục: Bắt đầu thực hành ➡</button>
                 </div>
 
