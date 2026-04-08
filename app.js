@@ -525,6 +525,13 @@ function submitCode() {
                 currentUser.stats[currentLangWorkspace].completedLessons.push(lesson.id);
                 currentUser.stats[currentLangWorkspace].exp += lesson.expReward;
                 saveUserProgress();
+                
+                // Kiểm tra nếu hoàn thành 10 bài học
+                if (currentUser.stats[currentLangWorkspace].completedLessons.length === 10) {
+                    setTimeout(() => {
+                        evaluateCompetency(currentLangWorkspace);
+                    }, 2500);
+                }
             }
             setTimeout(() => { showView('view-dashboard'); updateDashboard(); }, 2000);
             
@@ -741,4 +748,375 @@ function finishQuiz() {
     
     showView('view-dashboard');
     updateDashboard();
+}
+
+// ==========================================
+// EVALUATION & ADAPTIVE QUEST SYSTEM
+// ==========================================
+
+/**
+ * Đánh giá năng lực người dùng dựa trên kết quả học tập
+ * Thuật toán xét các yếu tố:
+ * - Tỷ lệ câu trả lời quiz đúng
+ * - Số lỗi khi làm bài tập
+ * - EXP tích lũy
+ * - Tốc độ hoàn thành bài học
+ */
+function evaluateCompetency(lang) {
+    const stats = currentUser.stats[lang];
+    const quizHistory = currentUser.quizHistory[lang] || [];
+    
+    if (!stats || stats.completedLessons.length < 10) return null;
+    
+    // 1. Tính tỷ lệ thành công từ quiz
+    let quizSuccessRate = 0;
+    if (quizHistory.length > 0) {
+        const avgQuizScore = quizHistory.reduce((sum, q) => sum + q.percentage, 0) / quizHistory.length;
+        quizSuccessRate = avgQuizScore / 100; // 0-1
+    } else {
+        quizSuccessRate = 0.5; // Mặc định nếu chưa làm quiz
+    }
+    
+    // 2. Tính điểm lỗi (càng ít lỗi càng tốt)
+    const errorPenalty = Math.min(stats.errors / 10, 0.5); // Tối đa trừ 50%
+    
+    // 3. Tính EXP score (dựa trên EXP tích lũy)
+    // Max EXP cho 10 bài = 20+30+30+30+40+40+40+50+50+50 = 380
+    const maxExpFor10Lessons = 380;
+    const expScore = Math.min(stats.exp / maxExpFor10Lessons, 1); // 0-1
+    
+    // 4. Công thức đánh giá năng lực (0-100)
+    // Weight: Quiz 40%, EXP 40%, Errors 20%
+    const competencyScore = (quizSuccessRate * 0.4 + expScore * 0.4 - errorPenalty * 0.2) * 100;
+    
+    const level = getCompetencyLevel(competencyScore);
+    
+    // Lưu kết quả đánh giá
+    if (!currentUser.competencies) currentUser.competencies = {};
+    currentUser.competencies[lang] = {
+        score: Math.round(competencyScore),
+        level: level,
+        evaluatedAt: new Date().toISOString(),
+        quizRate: Math.round(quizSuccessRate * 100),
+        errorCount: stats.errors,
+        expTotal: stats.exp
+    };
+    
+    saveUserProgress();
+    showCompetencyAlert(lang, level, competencyScore);
+    generateAdaptiveQuests(lang, level, competencyScore);
+    
+    return { score: competencyScore, level };
+}
+
+/**
+ * Xác định mức độ năng lực
+ * Beginner: 0-40 (Mới bắt đầu)
+ * Intermediate: 40-70 (Trung bình)
+ * Advanced: 70-100 (Nâng cao)
+ */
+function getCompetencyLevel(score) {
+    if (score < 40) return 'beginner';
+    if (score < 70) return 'intermediate';
+    return 'advanced';
+}
+
+/**
+ * Hiển thị thông báo kết quả đánh giá
+ */
+function showCompetencyAlert(lang, level, score) {
+    const levelNames = {
+        beginner: '🌱 Cơ Bản',
+        intermediate: '⭐ Trung Bình',
+        advanced: '🚀 Nâng Cao'
+    };
+    
+    const messages = {
+        beginner: 'Bạn cần ôn lại các kiến thức cơ bản trước khi tiến bộ.',
+        intermediate: 'Bạn đã nắm vững kiến thức cơ bản. Hãy tiếp tục luyện tập để cải thiện!',
+        advanced: 'Bạn đã đạt trình độ cao! Hãy thử những thử thách nâng cao hơn.'
+    };
+    
+    alert(`🎯 KẾT QUẢ ĐÁNH GIÁ\n\n` +
+          `Ngôn ngữ: ${langNames[lang]}\n` +
+          `Mức độ: ${levelNames[level]}\n` +
+          `Điểm: ${Math.round(score)}/100\n\n` +
+          `${messages[level]}`);
+}
+
+/**
+ * Tạo bài tập thích ứng dựa trên mức độ năng lực
+ * Mỗi level có độ khó tăng dần
+ */
+function generateAdaptiveQuests(lang, level, score) {
+    // Định nghĩa bài tập cho mỗi ngôn ngữ ở các mức độ khác nhau
+    const adaptiveQuests = defineAdaptiveQuests(lang);
+    
+    if (!currentUser.adaptiveQuests) currentUser.adaptiveQuests = {};
+    if (!currentUser.adaptiveQuests[lang]) currentUser.adaptiveQuests[lang] = [];
+    
+    // Chọn quests phù hợp với level
+    const selectedQuests = adaptiveQuests[level];
+    
+    // Shuffle quests
+    const shuffledQuests = selectedQuests.sort(() => 0.5 - Math.random());
+    
+    // Thêm vào danh sách bài tập của người dùng (tối đa 5 bài/level)
+    currentUser.adaptiveQuests[lang] = [
+        ...currentUser.adaptiveQuests[lang],
+        ...shuffledQuests.slice(0, 5).map((quest, idx) => ({
+            ...quest,
+            id: `${lang}-adaptive-${level}-${idx}-${Date.now()}`,
+            level: level,
+            unlocked: true,
+            completed: false,
+            createdAt: new Date().toISOString()
+        }))
+    ];
+    
+    saveUserProgress();
+    showAdaptiveQuestsUnlocked(lang, level);
+}
+
+/**
+ * Định nghĩa các bài tập thích ứng cho từng ngôn ngữ
+ */
+function defineAdaptiveQuests(lang) {
+    const questsMap = {
+        javascript: {
+            beginner: [
+                { 
+                    title: "Quest 1: In bảng cửu chương 7", 
+                    description: "Sử dụng vòng lặp để in bảng cửu chương 7 (7x1=7 ... 7x10=70)",
+                    difficulty: 1,
+                    expReward: 60,
+                    checkLogic: (code) => code.includes('for') && code.includes('7') && code.includes('console.log')
+                },
+                { 
+                    title: "Quest 2: Tìm số lớn nhất", 
+                    description: "Tạo hàm tìm số lớn nhất trong mảng [10, 45, 23, 78, 34]",
+                    difficulty: 1,
+                    expReward: 60,
+                    checkLogic: (code) => code.includes('function') || code.includes('=>') && code.includes('[') && code.includes('Math.max')
+                },
+                { 
+                    title: "Quest 3: Đảo chuỗi", 
+                    description: "Viết code đảo ngược chuỗi 'HELLO' thành 'OLLEH'",
+                    difficulty: 1,
+                    expReward: 60,
+                    checkLogic: (code) => (code.includes('reverse') || code.includes('split')) && code.includes('HELLO')
+                }
+            ],
+            intermediate: [
+                { 
+                    title: "Quest 4: Kiểm tra số nguyên tố", 
+                    description: "Viết hàm kiểm tra xem một số có phải số nguyên tố không",
+                    difficulty: 2,
+                    expReward: 80,
+                    checkLogic: (code) => code.includes('function') && code.includes('for') && (code.includes('%') || code.includes('modulo'))
+                },
+                { 
+                    title: "Quest 5: Lọc dữ liệu", 
+                    description: "Sử dụng filter() để lấy tất cả các số chẵn từ mảng",
+                    difficulty: 2,
+                    expReward: 80,
+                    checkLogic: (code) => code.includes('filter') && code.includes('%')
+                },
+                { 
+                    title: "Quest 6: Tạo máy tính ", 
+                    description: "Tạo object calculator với các phương thức add, subtract, multiply, divide",
+                    difficulty: 2,
+                    expReward: 80,
+                    checkLogic: (code) => code.includes('{') && code.includes('add') && code.includes('subtract')
+                }
+            ],
+            advanced: [
+                { 
+                    title: "Quest 7: Xây dựng Closure", 
+                    description: "Tạo hàm counter() sử dụng closure để lưu giữ state",
+                    difficulty: 3,
+                    expReward: 120,
+                    checkLogic: (code) => code.includes('function') && code.includes('return') && code.includes('function')
+                },
+                { 
+                    title: "Quest 8: Quy hoạch động", 
+                    description: "Tính fibonacci thứ n sử dụng memoization (tối ưu hiệu suất)",
+                    difficulty: 3,
+                    expReward: 120,
+                    checkLogic: (code) => (code.includes('fibonacci') || code.includes('fib')) && (code.includes('cache') || code.includes('memo'))
+                },
+                { 
+                    title: "Quest 9: Async/Promise", 
+                    description: "Viết hàm fetchData() sử dụng Promise hoặc async/await",
+                    difficulty: 3,
+                    expReward: 120,
+                    checkLogic: (code) => (code.includes('Promise') || code.includes('async')) && (code.includes('fetch') || code.includes('then'))
+                }
+            ]
+        },
+        python: {
+            beginner: [
+                { 
+                    title: "Quest 1: Tính tổng danh sách", 
+                    description: "Tính tổng các phần tử trong danh sách [1, 2, 3, 4, 5]",
+                    difficulty: 1,
+                    expReward: 60,
+                    checkLogic: (code) => code.includes('sum') || code.includes('for') && code.includes('[')
+                },
+                { 
+                    title: "Quest 2: Kiểm tra palindrome", 
+                    description: "Kiểm tra xem chuỗi 'racecar' có phải palindrome không",
+                    difficulty: 1,
+                    expReward: 60,
+                    checkLogic: (code) => (code.includes('==') || code.includes('==')) && (code.includes('[') || code.includes('reverse') || code.includes('[::-1]'))
+                },
+                { 
+                    title: "Quest 3: Nhân mảng", 
+                    description: "Tạo list chứa bình phương của [1, 2, 3, 4, 5]",
+                    difficulty: 1,
+                    expReward: 60,
+                    checkLogic: (code) => code.includes('[') && code.includes('**2') || code.includes('**2') || code.includes('pow')
+                }
+            ],
+            intermediate: [
+                { 
+                    title: "Quest 4: Sắp xếp từ điển", 
+                    description: "Sắp xếp danh sách từ theo thứ tự chữ cái",
+                    difficulty: 2,
+                    expReward: 80,
+                    checkLogic: (code) => code.includes('sorted') || code.includes('sort')
+                },
+                { 
+                    title: "Quest 5: Đếm tần suất", 
+                    description: "Đếm tần suất xuất hiện của mỗi ký tự trong chuỗi",
+                    difficulty: 2,
+                    expReward: 80,
+                    checkLogic: (code) => code.includes('for') && (code.includes('dict') || code.includes('{}') || code.includes('count'))
+                },
+                { 
+                    title: "Quest 6: Tạo class", 
+                    description: "Tạo lớp Student với các thuộc tính name, age, gpa",
+                    difficulty: 2,
+                    expReward: 80,
+                    checkLogic: (code) => code.includes('class ') && code.includes('__init__')
+                }
+            ],
+            advanced: [
+                { 
+                    title: "Quest 7: Generator", 
+                    description: "Viết generator để tạo số Fibonacci",
+                    difficulty: 3,
+                    expReward: 120,
+                    checkLogic: (code) => code.includes('yield') && (code.includes('fibonacci') || code.includes('fib'))
+                },
+                { 
+                    title: "Quest 8: Decorator", 
+                    description: "Tạo decorator @timer để đo thời gian thực hiện hàm",
+                    difficulty: 3,
+                    expReward: 120,
+                    checkLogic: (code) => code.includes('def') && code.includes('wrapper') && code.includes('@')
+                },
+                { 
+                    title: "Quest 9: Web Scraping", 
+                    description: "Viết script scrape dữ liệu từ trang web đơn giản",
+                    difficulty: 3,
+                    expReward: 120,
+                    checkLogic: (code) => (code.includes('requests') || code.includes('urllib')) && code.includes('get')
+                }
+            ]
+        },
+        cpp: {
+            beginner: [
+                { 
+                    title: "Quest 1: Số hoàn hảo", 
+                    description: "Tìm tất cả số hoàn hảo nhỏ hơn 1000 (ví dụ: 6, 28)",
+                    difficulty: 1,
+                    expReward: 60,
+                    checkLogic: (code) => code.includes('for') && code.includes('cout')
+                },
+                { 
+                    title: "Quest 2: Ma trận chuyển vị", 
+                    description: "Tính chuyển vị của ma trận 3x3",
+                    difficulty: 1,
+                    expReward: 60,
+                    checkLogic: (code) => code.includes('[') && code.includes('for') && code.includes('cout')
+                },
+                { 
+                    title: "Quest 3: GCD & LCM", 
+                    description: "Tính GCD và LCM của hai số",
+                    difficulty: 1,
+                    expReward: 60,
+                    checkLogic: (code) => (code.includes('gcd') || code.includes('GCD')) && code.includes('function')
+                }
+            ],
+            intermediate: [
+                { 
+                    title: "Quest 4: Quick Sort", 
+                    description: "Cài đặt thuật toán QuickSort",
+                    difficulty: 2,
+                    expReward: 80,
+                    checkLogic: (code) => code.includes('quicksort') || code.includes('partition')
+                },
+                { 
+                    title: "Quest 5: Binary Search", 
+                    description: "Tìm kiếm nhị phân trong mảng đã sắp xếp",
+                    difficulty: 2,
+                    expReward: 80,
+                    checkLogic: (code) => code.includes('int mid') && code.includes('binary')
+                },
+                { 
+                    title: "Quest 6: Linked List", 
+                    description: "Tạo cấu trúc dữ liệu Linked List với insert, delete, display",
+                    difficulty: 2,
+                    expReward: 80,
+                    checkLogic: (code) => code.includes('struct') && code.includes('next')
+                }
+            ],
+            advanced: [
+                { 
+                    title: "Quest 7: BST (Binary Search Tree)", 
+                    description: "Xây dựng và quản lý cây nhị phân tìm kiếm",
+                    difficulty: 3,
+                    expReward: 120,
+                    checkLogic: (code) => code.includes('struct') && (code.includes('left') && code.includes('right'))
+                },
+                { 
+                    title: "Quest 8: Graph DFS/BFS", 
+                    description: "Cài đặt DFS và BFS cho đồ thị",
+                    difficulty: 3,
+                    expReward: 120,
+                    checkLogic: (code) => (code.includes('DFS') || code.includes('BFS')) && code.includes('vector')
+                },
+                { 
+                    title: "Quest 9: Dynamic Programming", 
+                    description: "Giải bài toán Coin Change sử dụng DP",
+                    difficulty: 3,
+                    expReward: 120,
+                    checkLogic: (code) => code.includes('dp[') && code.includes('for')
+                }
+            ]
+        }
+    };
+    
+    // Mặc định cho các ngôn ngữ khác
+    if (!questsMap[lang]) {
+        questsMap[lang] = questsMap.javascript; // Dùng JavaScript làm template
+    }
+    
+    return questsMap[lang];
+}
+
+/**
+ * Hiển thị notification bài tập thích ứng được mở khóa
+ */
+function showAdaptiveQuestsUnlocked(lang, level) {
+    const levelNames = {
+        beginner: '🌱 Cơ Bản',
+        intermediate: '⭐ Trung Bình',
+        advanced: '🚀 Nâng Cao'
+    };
+    
+    alert(`🎁 BẠCH TẬP THÍCH ỨNG ĐÃ MỞ KHÓA!\n\n` +
+          `Bạn có thể bắt đầu các quest ở mức độ ${levelNames[level]} ngay bây giờ!\n\n` +
+          `Hoàn thành các quest để nhận EXP và cải thiện kỹ năng.`);
 }
