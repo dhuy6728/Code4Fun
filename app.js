@@ -331,10 +331,18 @@ window.onload = () => {
 };
 
 function showView(viewId) {
-    document.querySelectorAll('.view-section').forEach(el => { el.classList.remove('active'); el.classList.add('hidden'); });
+    document.querySelectorAll('.view-section').forEach(el => { 
+        el.classList.remove('active'); 
+        el.classList.add('hidden'); 
+    });
     document.getElementById(viewId).classList.remove('hidden');
     document.getElementById(viewId).classList.add('active');
     document.getElementById('user-nav').classList.toggle('hidden', viewId === 'view-auth');
+    
+    // Cập nhật dashboard khi quay lại
+    if (viewId === 'view-dashboard' && currentUser) {
+        updateDashboard();
+    }
 }
 
 function checkAndInitStats() {
