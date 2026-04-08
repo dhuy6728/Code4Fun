@@ -277,7 +277,7 @@ function displayQuizHistory() {
     allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
     
     if (allHistory.length === 0) {
-        historyContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px;">Chưa có lịch sử trắc nghiệm</p>';
+        historyContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted); background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.08)); border-radius: 8px; border: 1px solid rgba(99, 102, 241, 0.15);">Chưa có lịch sử trắc nghiệm</p>';
         return;
     }
     
@@ -434,10 +434,10 @@ function updateDashboard() {
         let lessonTitleHTML = '';
         if (availableLesson) {
              lessonTitleHTML = `<strong>Bài tiếp theo:</strong> ${availableLesson.title}`;
-             actionHTML = `<div style="display: flex; gap: 10px;"><button onclick="viewLanguageOverview('${lang}')" class="btn-outline" style="flex: 1;">Tổng Quan</button><button onclick="startQuiz('${lang}')" class="btn-outline" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">Trắc Nghiệm 📝</button><button onclick="startLesson('${lang}', '${availableLesson.id}')" class="btn-primary" style="flex: 1;">Vào Học</button></div>`;
+             actionHTML = `<div style="display: flex; gap: 10px;"><button onclick="viewLanguageOverview('${lang}')" class="btn-outline" style="flex: 1;">Tổng Quan</button><button onclick="startQuiz('${lang}')" class="btn-outline" style="flex: 1; background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%); color: white; border: none;">Trắc Nghiệm 📝</button><button onclick="startLesson('${lang}', '${availableLesson.id}')" class="btn-primary" style="flex: 1;">Vào Học</button></div>`;
         } else {
-             lessonTitleHTML = `<strong style="color: var(--success-color)">🎉 Đã hoàn thành mọi bài học!</strong>`;
-             actionHTML = `<div style="display: flex; gap: 10px;"><button onclick="viewLanguageOverview('${lang}')" class="btn-outline" style="flex: 1;">Tổng Quan</button><button onclick="startQuiz('${lang}')" class="btn-outline" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">Trắc Nghiệm 📝</button></div>`;
+             lessonTitleHTML = `<strong style="color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">🎉 Đã hoàn thành mọi bài học!</strong>`;
+             actionHTML = `<div style="display: flex; gap: 10px;"><button onclick="viewLanguageOverview('${lang}')" class="btn-outline" style="flex: 1;">Tổng Quan</button><button onclick="startQuiz('${lang}')" class="btn-outline" style="flex: 1; background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%); color: white; border: none;">Trắc Nghiệm 📝</button></div>`;
         }
 
         const cardHTML = `<div class="track-card"><div class="track-header"><div class="track-title">${langNames[lang]}</div><div class="track-stats"><span class="stat-badge stat-level">Cấp ${level}</span><span class="stat-badge">${stats.exp} EXP</span><span class="stat-badge stat-error">Sai: ${stats.errors} lần</span></div></div><div class="track-body"><div class="progress-bar"><div class="progress-fill" style="width: ${progressPercent}%"></div></div><div class="track-footer"><div class="lesson-info">${lessonTitleHTML}</div>${actionHTML}</div></div></div>`;
