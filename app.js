@@ -638,7 +638,7 @@ function submitCode() {
                 evaluateCompetency(currentLangWorkspace);
             }, 2500);
             }
-            setTimeout(() => { showView('view-dashboard'); updateDashboard(); }, 2000);
+            setTimeout(() => { showLessonCompletionScreen(lesson); }, 1500);
             
         } else {
             terminal.style.color = "#FF5555";
@@ -1271,3 +1271,59 @@ function showAdaptiveQuestsUnlocked(lang, level) {
           `Hoàn thành các quest để nhận EXP và cải thiện kỹ năng.`);
 }
 
+
+
+// ==========================================
+// LESSON COMPLETION FEATURES (Next & Redo)
+// ==========================================
+
+function showLessonCompletionScreen(lesson) {
+    // Ẩn practice section
+    document.getElementById('practice-section').classList.add('hidden');
+    document.getElementById('btn-submit').classList.add('hidden');
+    
+    // Hiển thị completion screen
+    document.getElementById('lesson-completion-section').classList.remove('hidden');
+    document.getElementById('lesson-completion-exp').innerText = `+${lesson.expReward}`;
+    
+    // Kiểm tra nếu có bài tiếp theo
+    const lessons = lessonsDB[currentLangWorkspace];
+    const currentIndex = lessons.findIndex(l => l.id === currentLessonId);
+    const hasNextLesson = currentIndex < lessons.length - 1;
+    
+    // Hiện/ẩn nút bài tiếp theo
+    const nextBtn = document.getElementById('btn-next-lesson');
+    if (hasNextLesson) {
+        nextBtn.classList.remove('hidden');
+    } else {
+        nextBtn.classList.add('hidden');
+    }
+}
+
+function redoCurrentLesson() {
+    // Reset editor, terminal, ẩn completion screen
+    editor.setValue("");
+    const terminal = document.getElementById('terminal-output');
+    terminal.innerText = "Ready...";
+    terminal.style.color = "var(--terminal-text)";
+    
+    document.getElementById('lesson-completion-section').classList.add('hidden');
+    document.getElementById('practice-section').classList.remove('hidden');
+    document.getElementById('btn-submit').classList.remove('hidden');
+    
+    editor.focus();
+}
+
+function goToNextLesson() {
+    const lessons = lessonsDB[currentLangWorkspace];
+    const currentIndex = lessons.findIndex(l => l.id === currentLessonId);
+    
+    if (currentIndex < lessons.length - 1) {
+        const nextLesson = lessons[currentIndex + 1];
+        startLesson(currentLangWorkspace, nextLesson.id);
+    } else {
+        alert("🎉 Bạn đã hoàn thành tất cả bài học trong ngôn ngữ này!");
+        showView('view-dashboard');
+        updateDashboard();
+    }
+}
