@@ -16,42 +16,40 @@
         <div class="logo" onclick="goHome()" style="cursor: pointer; transition: transform 0.2s ease;">🚀 Code4Students</div>
         <nav id="user-nav" class="hidden">
             <span id="user-greeting">Chào, User</span>
-            <button onclick="showView('view-quiz-history'); displayQuizHistory();" class="btn-outline">📊 Lịch Sử</button>
-            <button onclick="switchUILanguage()" class="btn-outline" id="lang-toggle" style="min-width: 120px;">🌐 English</button>
-            <button onclick="logout()" class="btn-outline">Đăng xuất</button>
+            <button onclick="showView('view-quiz-history'); displayQuizHistory();" class="btn-outline">📊 Lịch Sử / History</button>
+            <button onclick="logout()" class="btn-outline">Đăng xuất / Logout</button>
         </nav>
     </header>
 
     <section id="view-auth" class="view-section active">
         <div class="auth-card">
             <div class="auth-tabs">
-                <button id="tab-login" class="tab-btn active" onclick="switchAuthTab('login')">Đăng nhập</button>
-                <button id="tab-register" class="tab-btn" onclick="switchAuthTab('register')">Đăng ký</button>
+                <button id="tab-login" class="tab-btn active" onclick="switchAuthTab('login')">Đăng nhập / Login</button>
+                <button id="tab-register" class="tab-btn" onclick="switchAuthTab('register')">Đăng ký / Register</button>
             </div>
 
             <div id="form-login" class="auth-form active">
-                <h2>Mừng trở lại!</h2>
-                <input type="email" id="login-email" placeholder="Email của bạn">
-                <input type="password" id="login-password" placeholder="Mật khẩu">
-                <button onclick="login()" class="btn-primary">Đăng nhập</button>
+                <h2>Mừng trở lại! / Welcome back!</h2>
+                <input type="email" id="login-email" placeholder="Email của bạn / Your email">
+                <input type="password" id="login-password" placeholder="Mật khẩu / Password">
+                <button onclick="login()" class="btn-primary">Đăng nhập / Login</button>
             </div>
 
             <div id="form-register" class="auth-form hidden">
-                <h2>Tạo tài khoản mới</h2>
-                <input type="text" id="reg-name" placeholder="Tên hiển thị">
+                <h2>Tạo tài khoản mới / Create new account</h2>
+                <input type="text" id="reg-name" placeholder="Tên hiển thị / Display name">
                 <input type="email" id="reg-email" placeholder="Email">
-                <input type="password" id="reg-password" placeholder="Mật khẩu">
-                <button onclick="register()" class="btn-primary">Đăng ký ngay</button>
+                <input type="password" id="reg-password" placeholder="Mật khẩu / Password">
+                <button onclick="register()" class="btn-primary">Đăng ký ngay / Register now</button>
             </div>
         </div>
     </section>
 
     <section id="view-language-overview" class="view-section hidden">
         <div class="dashboard-container">
-            <button onclick="showView('view-dashboard')" class="btn-back">⬅️ Quay Lại Dashboard</button>
+            <button onclick="showView('view-dashboard')" class="btn-back">⬅️ Quay Lại / Back</button>
             
-            <div id="language-overview-content" style="background: linear-gradient(135deg, rgba(20, 25, 50, 0.6), rgba(30, 40, 70, 0.6)); backdrop-filter: blur(10px); padding: 30px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.2); box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);">
-                <h1 id="lang-overview-title" style="font-size: 2.2rem; margin-bottom: 10px; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></h1>
+            <div style="background: linear-gradient(135deg, rgba(20, 25, 50, 0.6), rgba(30, 40, 70, 0.6)); backdrop-filter: blur(10px); padding: 30px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.2); box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);">
                 <p id="lang-overview-description" style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 20px;"></p>
                 
                 <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.15)); padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid rgba(99, 102, 241, 0.2);">
@@ -83,8 +81,8 @@
         <div class="dashboard-container">
             <div class="dashboard-header" style="text-align: center; margin-bottom: 30px;">
                 <h2 style="font-size: 1.8rem; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700;">Lộ Trình Học Tập Của Bạn</h2>
-                <p style="color: var(--text-muted);">Hãy chọn ngôn ngữ lập trình để bắt đầu chinh phục thử thách hôm nay</p>
-            </div>
+                <p style="color: var(--text-muted);">Hãy chọn ngôn ngữ lập trình để bắt đầu chinh phục thử thách hôm nay</p>/ Learning Path</h2>
+                <p style="color: var(--text-muted);">Chọn ngôn ngữ để bắt đầu / Choose a language to start
             
             <div id="language-tracks-container" class="tracks-list"></div>
         </div>
@@ -96,8 +94,8 @@
             
             <div style="background: linear-gradient(135deg, rgba(20, 25, 50, 0.6), rgba(30, 40, 70, 0.6)); backdrop-filter: blur(10px); padding: 30px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.2); box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);">
                 <div style="text-align: center; margin-bottom: 30px;">
-                    <h1 id="quiz-title" style="font-size: 2rem; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px;">📝 Trắc Nghiệm <span id="quiz-lang-name"></span></h1>
-                    <p style="color: var(--text-muted);">Hãy trả lời <strong><span id="quiz-counter">1</span>/5</strong> câu hỏi</p>
+                    <h1 id="quiz-title" style="font-size: 2rem; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px;">📝 Trắc Nghiệm / Quiz <span id="quiz-lang-name"></span></h1>
+                    <p style="color: var(--text-muted);">Trả lời <strong><span id="quiz-counter">1</span>/5</strong> câu hỏi / Answer <strong><span id="quiz-counter-en">1</span>/5</strong> questions</p>
                     <div style="width: 100%; height: 8px; background: rgba(99, 102, 241, 0.2); border-radius: 4px; margin-top: 15px;">
                         <div id="quiz-progress-bar" style="height: 100%; background: linear-gradient(90deg, #6366f1, #ec4899); border-radius: 4px; width: 0%; transition: width 0.3s ease; box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);"></div>
                     </div>
@@ -110,13 +108,13 @@
                             <!-- Các đáp án sẽ được chèn vào đây -->
                         </div>
                         <div id="quiz-actions" style="margin-top: 25px; text-align: center;">
-                            <button id="btn-next-question" onclick="submitSelectedAnswer()" class="btn-primary" style="padding: 12px 40px; font-size: 1.05rem; min-width: 150px;" disabled>➡️ Câu Tiếp</button>
+                            <button id="btn-next-question" onclick="submitSelectedAnswer()" class="btn-primary" style="padding: 12px 40px; font-size: 1.05rem; min-width: 150px;" disabled>➡️ Câu Tiếp / Next</button>
                         </div>
                     </div>
                     <div id="quiz-result" class="hidden" style="text-align: center; padding: 40px;">
                         <h2 id="result-title" style="background: linear-gradient(135deg, #ec4899, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 20px; font-size: 1.8rem;"></h2>
                         <p id="result-message" style="color: var(--text-muted); margin-bottom: 20px; font-size: 1.1rem;"></p>
-                        <button onclick="finishQuiz()" class="btn-primary" style="padding: 15px 40px; font-size: 1rem;">Hoàn Thành Quiz</button>
+                        <button onclick="finishQuiz()" class="btn-primary" style="padding: 15px 40px; font-size: 1rem;">Hoàn Thành / Finish</button>
                     </div>
                 </div>
 
@@ -134,14 +132,14 @@
             
             <div style="background: linear-gradient(135deg, rgba(20, 25, 50, 0.6), rgba(30, 40, 70, 0.6)); backdrop-filter: blur(10px); padding: 30px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.2); box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);">
                 <div style="text-align: center; margin-bottom: 30px;">
-                    <h1 style="font-size: 2rem; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px;">📚 Lịch Sử Học Tập</h1>
-                    <p style="color: var(--text-muted);">Quản lý và xem lại các bài tập, quiz đã hoàn thành</p>
+                    <h1 style="font-size: 2rem; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px;">📚 Lịch Sử / History</h1>
+                    <p style="color: var(--text-muted);">Xem lại lịch sử học tập / Review your learning history</p>
                 </div>
 
                 <div style="margin-bottom: 20px;">
-                    <label style="font-weight: 600; color: var(--text-main); margin-right: 15px;">🔍 Lọc Theo Ngôn Ngữ:</label>
+                    <label style="font-weight: 600; color: var(--text-main); margin-right: 15px;">🔍 Lọc / Filter:</label>
                     <select id="history-filter" onchange="filterQuizHistory()" style="padding: 10px; margin-left: 10px; border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 6px; cursor: pointer; background: linear-gradient(135deg, rgba(20, 25, 50, 0.8), rgba(30, 40, 70, 0.8)); color: var(--text-main); font-weight: 500; min-width: 200px;">
-                        <option value="">Tất Cả Ngôn Ngữ</option>
+                        <option value="">Tất Cả / All</option>
                         <option value="javascript">JavaScript</option>
                         <option value="python">Python</option>
                         <option value="cpp">C++</option>
