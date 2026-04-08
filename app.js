@@ -794,8 +794,11 @@ function submitQuizAnswer(answerIndex) {
 }
 
 function updateQuizStats() {
-    document.getElementById('quiz-stats').innerText = 
-        `Đúng: ${quizState.correct} | Sai: ${quizState.incorrect} | Diểm: ${Math.round((quizState.correct / (quizState.correct + quizState.incorrect)) * 100)}%`;
+    const percentage = quizState.correct + quizState.incorrect > 0 
+        ? Math.round((quizState.correct / (quizState.correct + quizState.incorrect)) * 100)
+        : 0;
+    document.getElementById('quiz-stats').innerHTML = 
+        `✅ Đúng: ${quizState.correct} | ❌ Sai: ${quizState.incorrect} | <span style="font-size: 1.3rem; color: #06b6d4;">📈 ${percentage}%</span>`;
 }
 
 function showQuizResult() {
