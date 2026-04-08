@@ -108,7 +108,8 @@ input:focus, select:focus {
     border-bottom: 1px solid var(--border-color);
     position: sticky; top: 0; z-index: 100;
 }
-.logo { font-size: 1.4rem; font-weight: 800; color: var(--primary-color); letter-spacing: -0.5px; }
+.logo { font-size: 1.4rem; font-weight: 800; color: var(--primary-color); letter-spacing: -0.5px; cursor: pointer; transition: all 0.3s ease; user-select: none; }
+.logo:hover { transform: scale(1.05); opacity: 0.8; }
 #user-nav { display: flex; align-items: center; gap: 20px; font-weight: 500; }
 
 /* =========================================

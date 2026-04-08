@@ -292,6 +292,14 @@ function logout() {
     currentUser = null; showView('view-auth');
 }
 
+function goHome() {
+    if (currentUser) {
+        showView('view-dashboard');
+    } else {
+        showView('view-auth');
+    }
+}
+
 function saveUserProgress() {
     let users = JSON.parse(localStorage.getItem('code4students_users')) || {};
     users[currentUser.email] = currentUser;
