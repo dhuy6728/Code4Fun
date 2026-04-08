@@ -24,15 +24,15 @@
     <section id="view-auth" class="view-section active">
         <div class="auth-card">
             <div class="auth-tabs">
-                <button id="tab-login" class="tab-btn active" onclick="switchAuthTab('login')">Đăng nhập</button>
-                <button id="tab-register" class="tab-btn" onclick="switchAuthTab('register')">Đăng ký</button>
+                <button type="button" id="tab-login" class="tab-btn active" onclick="switchAuthTab('login')">Đăng nhập</button>
+                <button type="button" id="tab-register" class="tab-btn" onclick="switchAuthTab('register')">Đăng ký</button>
             </div>
 
             <div id="form-login" class="auth-form active">
                 <h2>Mừng trở lại!</h2>
                 <input type="email" id="login-email" placeholder="Email của bạn">
                 <input type="password" id="login-password" placeholder="Mật khẩu">
-                <button onclick="login()" class="btn-primary">Đăng nhập</button>
+                <button type="button" onclick="login()" class="btn-primary">Đăng nhập</button>
             </div>
 
             <div id="form-register" class="auth-form hidden">
@@ -40,7 +40,7 @@
                 <input type="text" id="reg-name" placeholder="Tên hiển thị">
                 <input type="email" id="reg-email" placeholder="Email">
                 <input type="password" id="reg-password" placeholder="Mật khẩu">
-                <button onclick="register()" class="btn-primary">Đăng ký ngay</button>
+                <button type="button" onclick="register()" class="btn-primary">Đăng ký ngay</button>
             </div>
         </div>
     </section>
