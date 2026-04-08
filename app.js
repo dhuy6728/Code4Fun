@@ -79,6 +79,226 @@ const editorModes = { javascript: "javascript", python: "python", cpp: "text/x-c
 const fileExtensions = { javascript: "main.js", python: "main.py", cpp: "main.cpp", java: "Main.java", csharp: "Program.cs" };
 
 // ==========================================
+// BILINGUAL SUPPORT (TỰ ĐỘNG DỊCH)
+// ==========================================
+let currentLanguage = localStorage.getItem('code4students_ui_language') || 'vi';
+
+const translations = {
+    vi: {
+        // Header
+        'greeting': 'Chào, {name}',
+        'history': '📊 Lịch Sử',
+        'logout': 'Đăng xuất',
+        'language': '🌐 English',
+        
+        // Auth
+        'login_tab': 'Đăng nhập',
+        'register_tab': 'Đăng ký',
+        'welcome_back': 'Mừng trở lại!',
+        'login_btn': 'Đăng nhập',
+        'new_account': 'Tạo tài khoản mới',
+        'register_btn': 'Đăng ký ngay',
+        'email_placeholder': 'Email của bạn',
+        'name_placeholder': 'Tên hiển thị',
+        'password_placeholder': 'Mật khẩu',
+        
+        // Dashboard
+        'learning_path': 'Lộ Trình Học Tập Của Bạn',
+        'choose_language': 'Hãy chọn ngôn ngữ lập trình để bắt đầu chinh phục thử thách hôm nay',
+        'next_lesson': 'Bài tiếp theo:',
+        'all_completed': '🎉 Đã hoàn thành mọi bài học!',
+        'overview': 'Tổng Quan',
+        'quiz': 'Trắc Nghiệm 📝',
+        'start_learning': 'Học Ngay 📖',
+        'level': 'Cấp',
+        'exp_points': 'EXP',
+        'errors': 'Sai:',
+        
+        // Quiz
+        'quiz_title': '📝 Trắc Nghiệm',
+        'answer_question': 'Hãy trả lời',
+        'of': 'của',
+        'questions': 'câu hỏi',
+        'next_question': '➡️ Câu Tiếp',
+        'finish_quiz': 'Hoàn Thành Quiz',
+        'select_answer': '⚠️ Vui lòng chọn một đáp án!',
+        'excellent': '🎉 TUYỆT VỜI!',
+        'perfect_score': 'Bạn trả lời đúng cả 5 câu hỏi!',
+        'great': '✅ XUẤT SẮC!',
+        'good': '👍 TỐT!',
+        'try_harder': '📚 CỐ GẮNG HƠN NỮA!',
+        'continue_practice': '💪 HÃY TIẾP TỤC LUYỆN TẬP!',
+        'correct_answer': 'Đúng:',
+        'wrong_answer': 'Sai:',
+        'score': 'Điểm:',
+        'quiz_stats': '📊 Thống kê quiz:',
+        'received_exp': 'EXP nhận được!',
+        
+        // History
+        'history_title': '📚 Lịch Sử Học Tập',
+        'manage_history': 'Quản lý và xem lại các bài tập, quiz đã hoàn thành',
+        'filter_language': '🔍 Lọc Theo Ngôn Ngữ:',
+        'all_languages': 'Tất Cả Ngôn Ngữ',
+        'no_history': 'Chưa có lịch sử học tập',
+        'view_code': '👁️ Click để xem code',
+        
+        // Code Storage
+        'code_storage': '💾 Kho Lưu Trữ Code',
+        'saved_date': 'Lưu:',
+        'copy_code': '📋 Sao Chép Code',
+        'back': 'Quay Lại',
+        'source_code': '💻 Source Code',
+        'characters': 'ký tự',
+        'copied': '✅ Đã sao chép code vào clipboard!',
+        'copy_failed': '❌ Không thể sao chép code!',
+        'code_not_found': '❌ Không tìm thấy code đã lưu!',
+        
+        // Workspace
+        'theory': '📚 Lý Thuyết',
+        'hints': '💡 Gợi Ý',
+        'examples': '📝 Ví Dụ',
+        'read_theory': 'Hãy đọc kỹ lý thuyết ở trên...',
+        'start_practice': 'Bắt Đầu Thực Hành 🚀',
+        'task': '🎯 Nhiệm vụ của bạn:',
+        'run_code': 'Chạy thử (Run)',
+        'submit_code': 'Nộp bài (Submit)',
+        'terminal': 'Terminal Output',
+        'ready': 'Ready...',
+        'compiling': 'Đang biên dịch...',
+        'success': 'Chạy thành công',
+        'grading': 'Đang chấm bài...',
+        'correct': '✅ CHÍNH XÁC!',
+        'incorrect': '❌ Code chưa chính xác!\nBạn đã bị ghi nhận 1 lỗi.',
+        
+        // Status messages
+        'confirm_register': '✅ Đăng ký thành công!',
+        'error_register': '❌ Vui lòng điền đủ thông tin!',
+        'email_exists': '⚠️ Email đã tồn tại!',
+        'login_error': '❌ Sai email hoặc mật khẩu!',
+        
+        // Language Overview
+        'app_features': '⚡ Đặc Điểm',
+        'install_guide': '💻 Cách Cài Đặt & Chạy',
+        'use_cases': '🚀 Ứng Dụng & Công Dụng',
+        'start_learning_now': 'Bắt Đầu Học Ngay 🚀',
+        'overview_section': '📖 Tổng Quan'
+    },
+    en: {
+        // Header
+        'greeting': 'Hello, {name}',
+        'history': '📊 History',
+        'logout': 'Logout',
+        'language': '🌐 Tiếng Việt',
+        
+        // Auth
+        'login_tab': 'Login',
+        'register_tab': 'Register',
+        'welcome_back': 'Welcome back!',
+        'login_btn': 'Login',
+        'new_account': 'Create new account',
+        'register_btn': 'Register now',
+        'email_placeholder': 'Your email',
+        'name_placeholder': 'Display name',
+        'password_placeholder': 'Password',
+        
+        // Dashboard
+        'learning_path': 'Your Learning Path',
+        'choose_language': 'Choose a programming language to start conquering today\'s challenges',
+        'next_lesson': 'Next lesson:',
+        'all_completed': '🎉 All lessons completed!',
+        'overview': 'Overview',
+        'quiz': 'Quiz 📝',
+        'start_learning': 'Learn Now 📖',
+        'level': 'Level',
+        'exp_points': 'EXP',
+        'errors': 'Errors:',
+        
+        // Quiz
+        'quiz_title': '📝 Quiz',
+        'answer_question': 'Answer',
+        'of': 'of',
+        'questions': 'questions',
+        'next_question': '➡️ Next Question',
+        'finish_quiz': 'Finish Quiz',
+        'select_answer': '⚠️ Please select an answer!',
+        'excellent': '🎉 EXCELLENT!',
+        'perfect_score': 'You answered all 5 questions correctly!',
+        'great': '✅ GREAT!',
+        'good': '👍 GOOD!',
+        'try_harder': '📚 TRY HARDER!',
+        'continue_practice': '💪 CONTINUE PRACTICING!',
+        'correct_answer': 'Correct:',
+        'wrong_answer': 'Wrong:',
+        'score': 'Score:',
+        'quiz_stats': '📊 Quiz statistics:',
+        'received_exp': 'EXP earned!',
+        
+        // History
+        'history_title': '📚 Learning History',
+        'manage_history': 'Manage and review completed lessons and quizzes',
+        'filter_language': '🔍 Filter By Language:',
+        'all_languages': 'All Languages',
+        'no_history': 'No learning history yet',
+        'view_code': '👁️ Click to view code',
+        
+        // Code Storage
+        'code_storage': '💾 Code Storage',
+        'saved_date': 'Saved:',
+        'copy_code': '📋 Copy Code',
+        'back': 'Back',
+        'source_code': '💻 Source Code',
+        'characters': 'characters',
+        'copied': '✅ Code copied to clipboard!',
+        'copy_failed': '❌ Unable to copy code!',
+        'code_not_found': '❌ Saved code not found!',
+        
+        // Workspace
+        'theory': '📚 Theory',
+        'hints': '💡 Hints',
+        'examples': '📝 Examples',
+        'read_theory': 'Read the theory carefully above...',
+        'start_practice': 'Start Practice 🚀',
+        'task': '🎯 Your task:',
+        'run_code': 'Run (Run)',
+        'submit_code': 'Submit',
+        'terminal': 'Terminal Output',
+        'ready': 'Ready...',
+        'compiling': 'Compiling...',
+        'success': 'Successfully executed',
+        'grading': 'Grading...',
+        'correct': '✅ CORRECT!',
+        'incorrect': '❌ Code is not correct!\nYou have been recorded with 1 error.',
+        
+        // Status messages
+        'confirm_register': '✅ Registration successful!',
+        'error_register': '❌ Please fill in all information!',
+        'email_exists': '⚠️ Email already exists!',
+        'login_error': '❌ Wrong email or password!',
+        
+        // Language Overview
+        'app_features': '⚡ Features',
+        'install_guide': '💻 Installation & Setup',
+        'use_cases': '🚀 Applications & Use Cases',
+        'start_learning_now': 'Start Learning Now 🚀',
+        'overview_section': '📖 Overview'
+    }
+};
+
+function t(key, params = {}) {
+    let text = translations[currentLanguage][key] || translations['vi'][key] || key;
+    for (const [param, value] of Object.entries(params)) {
+        text = text.replace(`{${param}}`, value);
+    }
+    return text;
+}
+
+function switchUILanguage() {
+    currentLanguage = currentLanguage === 'vi' ? 'en' : 'vi';
+    localStorage.setItem('code4students_ui_language', currentLanguage);
+    location.reload();
+}
+
+// ==========================================
 // CUSTOM LESSONS - 10 BÀI CHO MỖI NGÔN NGỮ
 // ==========================================
 const lessonsDB = {
@@ -375,7 +595,7 @@ function displayQuizHistory() {
 function viewSavedCode(lang, lessonId) {
     const savedCode = currentUser.savedCodes?.[lang]?.[lessonId];
     if (!savedCode) {
-        alert('Không tìm thấy code đã lưu!');
+        alert(t('code_not_found'));
         return;
     }
     
@@ -396,9 +616,9 @@ function viewSavedCode(lang, lessonId) {
 function copySavedCode() {
     const codeContent = document.getElementById('saved-code-content').innerText;
     navigator.clipboard.writeText(codeContent).then(() => {
-        alert('✅ Đã copy code vào clipboard!');
+        alert(t('copied'));
     }).catch(() => {
-        alert('Không thể copy code!');
+        alert(t('copy_failed'));
     });
 }
 
@@ -471,14 +691,14 @@ function register() {
     const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value;
 
-    if (!name || !email || !password) return alert("Vui lòng điền đủ thông tin!");
+    if (!name || !email || !password) return alert(t('error_register'));
     let users = JSON.parse(localStorage.getItem('code4students_users')) || {};
-    if (users[email]) return alert("Email đã tồn tại!");
+if (users[email]) return alert(t('email_exists'));
 
     users[email] = { email, password, name, stats: {} };
     localStorage.setItem('code4students_users', JSON.stringify(users));
     
-    alert("Đăng ký thành công!");
+    alert(t('confirm_register'));
     switchAuthTab('login');
     document.getElementById('login-email').value = email;
 }
@@ -494,7 +714,7 @@ function login() {
         localStorage.setItem('code4students_active_user', email);
         showView('view-dashboard');
         updateDashboard();
-    } else { alert("Sai email hoặc mật khẩu!"); }
+    } else { alert(t('login_error')); }
 }
 
 function logout() {
@@ -517,7 +737,8 @@ function saveUserProgress() {
 }
 
 function updateDashboard() {
-    document.getElementById('user-greeting').innerText = `Chào, ${currentUser.name}`;
+    document.getElementById('user-greeting').innerText = t('greeting', { name: currentUser.name });
+    document.getElementById('lang-toggle').innerText = t('language');
     
     const container = document.getElementById('language-tracks-container');
     container.innerHTML = '';
@@ -619,7 +840,7 @@ function submitCode() {
     setTimeout(() => {
         if (lesson.checkLogic(code)) {
             terminal.style.color = "#00FF41";
-            terminal.innerText = `✅ CHÍNH XÁC!\nBạn nhận được +${lesson.expReward} EXP.`;
+            terminal.innerText = `✅ CHÍNH XÁC!\n+${lesson.expReward} EXP nhận được!`;
             
             if (!currentUser.stats[currentLangWorkspace].completedLessons.includes(lesson.id)) {
                 currentUser.stats[currentLangWorkspace].completedLessons.push(lesson.id);
@@ -634,17 +855,15 @@ function submitCode() {
                 saveUserProgress();
                 
                 // Kiểm tra nếu hoàn thành 10 bài học
-                if (currentUser.stats[currentLangWorkspace].completedLessons.length === 10) {
-                    setTimeout(() => {
-                        evaluateCompetency(currentLangWorkspace);
-                    }, 2500);
-                }
+                setTimeout(() => {
+                evaluateCompetency(currentLangWorkspace);
+            }, 2500);
             }
             setTimeout(() => { showView('view-dashboard'); updateDashboard(); }, 2000);
             
         } else {
             terminal.style.color = "#FF5555";
-            terminal.innerText = "❌ Code chưa chính xác! Bạn đã bị ghi nhận 1 lỗi.";
+            terminal.innerText = "❌ Code chưa chính xác!\nBạn đã bị ghi nhận 1 lỗi.";
             
             currentUser.stats[currentLangWorkspace].errors += 1;
             saveUserProgress();
@@ -789,7 +1008,7 @@ function selectQuizAnswer(index) {
 
 function submitSelectedAnswer() {
     if (quizState.selectedAnswer === -1) {
-        alert('Vui lòng chọn một đáp án!');
+        alert(t('select_answer'));
         return;
     }
     submitQuizAnswer(quizState.selectedAnswer);
@@ -841,7 +1060,7 @@ function submitQuizAnswer(answerIndex) {
 
 function updateQuizStats() {
     document.getElementById('quiz-stats').innerText = 
-        `Đúng: ${quizState.correct} | Sai: ${quizState.incorrect} | Điểm: ${Math.round((quizState.correct / (quizState.correct + quizState.incorrect)) * 100)}%`;
+        `${t('correct_answer')} ${quizState.correct} | ${t('wrong_answer')} ${quizState.incorrect} | ${t('score')} ${Math.round((quizState.correct / (quizState.correct + quizState.incorrect)) * 100)}%`;
 }
 
 function showQuizResult() {
@@ -857,20 +1076,20 @@ function showQuizResult() {
     let resultMessage = '';
     
     if (percentage === 100) {
-        resultTitle = '🎉 TUYỆT VỜI!';
-        resultMessage = `Bạn trả lời đúng cả 5 câu hỏi! Nhận +${expReward} EXP`;
+        resultTitle = t('excellent');
+        resultMessage = `${t('perfect_score')} +${expReward} ${t('received_exp')}`;
     } else if (percentage >= 80) {
-        resultTitle = '✅ XUẤT SẮC!';
-        resultMessage = `Bạn đạt ${percentage}%. Nhận +${expReward} EXP`;
+        resultTitle = t('great');
+        resultMessage = `${t('score')} ${percentage}%. +${expReward} ${t('received_exp')}`;
     } else if (percentage >= 60) {
-        resultTitle = '👍 TỐT!';
-        resultMessage = `Bạn đạt ${percentage}%. Nhận +${expReward} EXP`;
+        resultTitle = t('good');
+        resultMessage = `${t('score')} ${percentage}%. +${expReward} ${t('received_exp')}`;
     } else if (percentage >= 40) {
-        resultTitle = '📚 CỐ GẮNG HƠN NỮA!';
-        resultMessage = `Bạn đạt ${percentage}%. Nhận +${expReward} EXP`;
+        resultTitle = t('try_harder');
+        resultMessage = `${t('score')} ${percentage}%. +${expReward} ${t('received_exp')}`;
     } else {
-        resultTitle = '💪 HÃYTIẾP TỤC LUYỆN TẬP!';
-        resultMessage = `Bạn đạt ${percentage}%. Hãy ôn lại lý thuyết và thử lại!`;
+        resultTitle = t('continue_practice');
+        resultMessage = `${t('score')} ${percentage}%.`;
     }
     
     document.getElementById('result-title').innerText = resultTitle;
