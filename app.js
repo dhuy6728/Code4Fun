@@ -551,8 +551,10 @@ function viewLanguageOverview(lang) {
     useCasesContainer.innerHTML = '';
     info.useCases.forEach(useCase => {
         const card = document.createElement('div');
-        card.style.cssText = 'background: white; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center;';
+        card.style.cssText = 'background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(236, 72, 153, 0.1)); padding: 20px; border-radius: 8px; border: 1px solid rgba(99, 102, 241, 0.2); text-align: center; color: var(--text-main); transition: all 0.3s ease;';
         card.innerText = useCase;
+        card.onmouseover = () => { card.style.borderColor = '#6366f1'; card.style.boxShadow = '0 0 15px rgba(99, 102, 241, 0.3)'; };
+        card.onmouseout = () => { card.style.borderColor = 'rgba(99, 102, 241, 0.2)'; card.style.boxShadow = 'none'; };
         useCasesContainer.appendChild(card);
     });
     
@@ -615,8 +617,8 @@ function showQuizQuestion() {
         const answerBtn = document.createElement('button');
         answerBtn.classList.add('quiz-answer-btn');
         answerBtn.style.cssText = `
-            background: white;
-            border: 2px solid var(--border-color);
+            background: linear-gradient(135deg, rgba(20, 25, 50, 0.8), rgba(30, 40, 70, 0.8));
+            border: 2px solid rgba(99, 102, 241, 0.3);
             padding: 15px;
             border-radius: 8px;
             font-size: 1rem;
@@ -624,10 +626,11 @@ function showQuizQuestion() {
             transition: all 0.3s ease;
             text-align: left;
             font-weight: 500;
+            color: var(--text-main);
         `;
         answerBtn.innerText = String.fromCharCode(65 + index) + '. ' + answer;
-        answerBtn.onmouseover = () => { answerBtn.style.borderColor = 'var(--primary-color)'; answerBtn.style.background = '#f0f4f8'; };
-        answerBtn.onmouseout = () => { answerBtn.style.borderColor = 'var(--border-color)'; answerBtn.style.background = 'white'; };
+        answerBtn.onmouseover = () => { answerBtn.style.borderColor = '#6366f1'; answerBtn.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.15))'; answerBtn.style.boxShadow = '0 0 15px rgba(99, 102, 241, 0.3)'; };
+        answerBtn.onmouseout = () => { answerBtn.style.borderColor = 'rgba(99, 102, 241, 0.3)'; answerBtn.style.background = 'linear-gradient(135deg, rgba(20, 25, 50, 0.8), rgba(30, 40, 70, 0.8))'; answerBtn.style.boxShadow = 'none'; };
         answerBtn.onclick = () => submitQuizAnswer(index);
         answersContainer.appendChild(answerBtn);
     });
