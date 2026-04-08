@@ -108,6 +108,9 @@
                         <div id="answers-container" style="display: grid; gap: 15px;">
                             <!-- Các đáp án sẽ được chèn vào đây -->
                         </div>
+                        <div id="quiz-actions" style="margin-top: 25px; text-align: center;">
+                            <button id="btn-next-question" onclick="submitSelectedAnswer()" class="btn-primary" style="padding: 12px 40px; font-size: 1.05rem;" disabled>➡️ Tiếp Theo</button>
+                        </div>
                     </div>
                     <div id="quiz-result" class="hidden" style="text-align: center; padding: 40px;">
                         <h2 id="result-title" style="background: linear-gradient(135deg, #ec4899, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 20px; font-size: 1.8rem;"></h2>
@@ -118,7 +121,7 @@
 
                 <div style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(236, 72, 153, 0.15)); border-radius: 8px; border-left: 4px solid linear-gradient(180deg, #6366f1, #ec4899); border: 1px solid rgba(99, 102, 241, 0.2);">
                     <strong style="color: var(--text-main);">📊 Thống kê quiz:</strong>
-                    <div id="quiz-stats" style="margin: 15px 0 0 0; color: #10b981; font-weight: 600; font-size: 1.1rem;">✅ Đúng: 0 | ❌ Sai: 0 | <span style="font-size: 1.3rem;">📈 0%</span></div>
+                    <p id="quiz-stats" style="margin: 10px 0 0 0; color: var(--text-muted);">Đúng: 0 | Sai: 0 | Diểm: 0</p>
                 </div>
             </div>
         </div>

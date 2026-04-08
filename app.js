@@ -222,7 +222,8 @@ let quizState = {
     usedQuestions: new Set(),
     correct: 0,
     incorrect: 0,
-    correctQuestions: []
+    correctQuestions: [],
+    selectedAnswer: -1
 };
 let currentLangWorkspace = null;
 let currentLessonId = null;
@@ -689,6 +690,7 @@ function startQuiz(lang) {
     quizState.correct = 0;
     quizState.incorrect = 0;
     quizState.correctQuestions = [];
+    quizState.selectedAnswer = -1;
     
     // Lấy 5 câu hỏi ngẫu nhiên không lặp lại
     const allQuestions = quizDB[lang];
@@ -723,12 +725,20 @@ function showQuizQuestion() {
     document.getElementById('quiz-result').classList.add('hidden');
     document.getElementById('question-container').classList.remove('hidden');
     
+    // Reset selected answer
+    quizState.selectedAnswer = -1;
+    const nextBtn = document.getElementById('btn-next-question');
+    nextBtn.disabled = true;
+    nextBtn.style.opacity = '0.5';
+    nextBtn.style.cursor = 'not-allowed';
+    
     const answersContainer = document.getElementById('answers-container');
     answersContainer.innerHTML = '';
     
     question.a.forEach((answer, index) => {
         const answerBtn = document.createElement('button');
         answerBtn.classList.add('quiz-answer-btn');
+        answerBtn.dataset.index = index;
         answerBtn.style.cssText = `
             background: linear-gradient(135deg, rgba(20, 25, 50, 0.8), rgba(30, 40, 70, 0.8));
             border: 2px solid rgba(99, 102, 241, 0.3);
@@ -742,11 +752,47 @@ function showQuizQuestion() {
             color: var(--text-main);
         `;
         answerBtn.innerText = String.fromCharCode(65 + index) + '. ' + answer;
-        answerBtn.onmouseover = () => { answerBtn.style.borderColor = '#6366f1'; answerBtn.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.15))'; answerBtn.style.boxShadow = '0 0 15px rgba(99, 102, 241, 0.3)'; };
-        answerBtn.onmouseout = () => { answerBtn.style.borderColor = 'rgba(99, 102, 241, 0.3)'; answerBtn.style.background = 'linear-gradient(135deg, rgba(20, 25, 50, 0.8), rgba(30, 40, 70, 0.8))'; answerBtn.style.boxShadow = 'none'; };
-        answerBtn.onclick = () => submitQuizAnswer(index);
+        answerBtn.onmouseover = () => { if (quizState.selectedAnswer !== index) { answerBtn.style.borderColor = '#6366f1'; answerBtn.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.15))'; answerBtn.style.boxShadow = '0 0 15px rgba(99, 102, 241, 0.3)'; } };
+        answerBtn.onmouseout = () => { if (quizState.selectedAnswer !== index) { answerBtn.style.borderColor = 'rgba(99, 102, 241, 0.3)'; answerBtn.style.background = 'linear-gradient(135deg, rgba(20, 25, 50, 0.8), rgba(30, 40, 70, 0.8))'; answerBtn.style.boxShadow = 'none'; } };
+        answerBtn.onclick = () => selectQuizAnswer(index);
         answersContainer.appendChild(answerBtn);
     });
+}
+
+function selectQuizAnswer(index) {
+    quizState.selectedAnswer = index;
+    const buttons = document.querySelectorAll('.quiz-answer-btn');
+    
+    // Remove highlight from all buttons
+    buttons.forEach((btn, i) => {
+        if (i === index) {
+            // Highlight selected button
+            btn.style.background = 'linear-gradient(135deg, #6366f1, #ec4899)';
+            btn.style.borderColor = '#6366f1';
+            btn.style.color = 'white';
+            btn.style.boxShadow = '0 0 20px rgba(99, 102, 241, 0.5)';
+        } else {
+            // Reset other buttons
+            btn.style.background = 'linear-gradient(135deg, rgba(20, 25, 50, 0.8), rgba(30, 40, 70, 0.8))';
+            btn.style.borderColor = 'rgba(99, 102, 241, 0.3)';
+            btn.style.color = 'var(--text-main)';
+            btn.style.boxShadow = 'none';
+        }
+    });
+    
+    // Enable next button
+    const nextBtn = document.getElementById('btn-next-question');
+    nextBtn.disabled = false;
+    nextBtn.style.opacity = '1';
+    nextBtn.style.cursor = 'pointer';
+}
+
+function submitSelectedAnswer() {
+    if (quizState.selectedAnswer === -1) {
+        alert('Vui lòng chọn một đáp án!');
+        return;
+    }
+    submitQuizAnswer(quizState.selectedAnswer);
 }
 
 function submitQuizAnswer(answerIndex) {
@@ -794,11 +840,8 @@ function submitQuizAnswer(answerIndex) {
 }
 
 function updateQuizStats() {
-    const percentage = quizState.correct + quizState.incorrect > 0 
-        ? Math.round((quizState.correct / (quizState.correct + quizState.incorrect)) * 100)
-        : 0;
-    document.getElementById('quiz-stats').innerHTML = 
-        `✅ Đúng: ${quizState.correct} | ❌ Sai: ${quizState.incorrect} | <span style="font-size: 1.3rem; color: #06b6d4;">📈 ${percentage}%</span>`;
+    document.getElementById('quiz-stats').innerText = 
+        `Đúng: ${quizState.correct} | Sai: ${quizState.incorrect} | Điểm: ${Math.round((quizState.correct / (quizState.correct + quizState.incorrect)) * 100)}%`;
 }
 
 function showQuizResult() {
