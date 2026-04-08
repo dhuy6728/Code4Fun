@@ -313,7 +313,7 @@ function displayQuizHistory() {
     allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
     
     if (allHistory.length === 0) {
-        historyContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted); background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.08)); border-radius: 8px; border: 1px solid rgba(99, 102, 241, 0.15);">Chưa có lịch sử trắc nghiệm</p>';
+        historyContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted); background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.08)); border-radius: 8px; border: 1px solid rgba(99, 102, 241, 0.15);">Chưa có lịch sử học tập</p>';
         return;
     }
     
@@ -323,9 +323,16 @@ function displayQuizHistory() {
         const langMap = { javascript: 'JavaScript', python: 'Python', cpp: 'C++', java: 'Java', csharp: 'C#' };
         
         let scoreDetailsHTML = '';
+        let typeIcon = '';
+        
         if (record.type === 'quiz') {
+            typeIcon = '📝';
             scoreDetailsHTML = `<div class="score-details">${record.correct}/${record.correct + record.incorrect} câu đúng</div>`;
+        } else if (record.type === 'lesson') {
+            typeIcon = '💻';
+            scoreDetailsHTML = `<div class="score-details" style="color: #10b981;">✅ Hoàn Thành</div>`;
         } else if (record.type === 'quest') {
+            typeIcon = '🏆';
             scoreDetailsHTML = `<div class="score-details" style="color: #10b981;">✅ Hoàn Thành</div>`;
         }
         
@@ -336,7 +343,7 @@ function displayQuizHistory() {
                     <span class="history-date">${dateStr}</span>
                 </div>
                 <div class="history-title" style="margin: 10px 0; color: var(--text-main); font-weight: 500;">
-                    ${record.type === 'quiz' ? '📝' : '🎯'} ${record.title || 'Unknown'}
+                    ${typeIcon} ${record.title || 'Unknown'}
                 </div>
                 <div class="history-score">
                     <div class="score-big">${record.percentage}%</div>
