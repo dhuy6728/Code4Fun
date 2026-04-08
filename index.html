@@ -208,6 +208,33 @@
         </div>
     </section>
 
+    <section id="view-saved-code" class="view-section hidden">
+        <div class="dashboard-container">
+            <button onclick="showView('view-quiz-history'); displayQuizHistory();" class="btn-back">⬅ Quay lại Lịch sử</button>
+            
+            <div style="background: linear-gradient(135deg, rgba(20, 25, 50, 0.6), rgba(30, 40, 70, 0.6)); backdrop-filter: blur(10px); padding: 30px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.2); box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15); margin-bottom: 30px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="color: #06b6d4; font-size: 0.9rem; margin-bottom: 5px;">💾 KHO LƯU TRỮ CODE</div>
+                    <h1 style="font-size: 2rem; margin: 10px 0; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" id="saved-code-title">Code của bạn</h1>
+                    <p style="color: var(--text-muted); margin: 0;"><span id="saved-code-lang">JavaScript</span> • <span id="saved-code-date">Đã lưu: -</span></p>
+                </div>
+                
+                <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                    <button onclick="copySavedCode()" class="btn-primary" style="flex: 1; max-width: 250px;">📋 Copy Code</button>
+                    <button onclick="showView('view-quiz-history'); displayQuizHistory();" class="btn-outline" style="flex: 1; max-width: 250px;">Quay lại</button>
+                </div>
+            </div>
+            
+            <div style="background: rgba(15, 20, 40, 0.8); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(99, 102, 241, 0.2);">
+                    <span style="color: #10b981; font-size: 0.9rem;">💻 Source Code</span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;"><span id="saved-code-length">0</span> ký tự</span>
+                </div>
+                <pre id="saved-code-content" style="background: rgba(5, 10, 25, 0.6); padding: 20px; border-radius: 8px; overflow-x: auto; color: #86efac; font-family: 'Fira Code', monospace; font-size: 0.95rem; line-height: 1.6; margin: 0; border: 1px solid rgba(16, 185, 129, 0.2);">// Code sẽ hiển thị ở đây</pre>
+            </div>
+        </div>
+    </section>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>

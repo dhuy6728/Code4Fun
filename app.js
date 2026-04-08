@@ -226,6 +226,7 @@ let quizState = {
 };
 let currentLangWorkspace = null;
 let currentLessonId = null;
+let filteredHistoryLang = '';
 let editor;
 
 // ==========================================
@@ -249,6 +250,18 @@ function saveQuizHistory(lang, score, correct, incorrect) {
     
     currentUser.quizHistory[lang].push(historyRecord);
     saveUserProgress();
+}
+
+function saveLessonCode(lang, lessonId, lessonTitle, code) {
+    if (!currentUser.savedCodes) currentUser.savedCodes = {};
+    if (!currentUser.savedCodes[lang]) currentUser.savedCodes[lang] = {};
+    
+    currentUser.savedCodes[lang][lessonId] = {
+        code: code,
+        title: lessonTitle,
+        date: new Date().toISOString(),
+        codeLength: code.length
+    };
 }
 
 function saveLessonHistory(lang, lessonId, lessonTitle, expReward) {
@@ -324,6 +337,7 @@ function displayQuizHistory() {
         
         let scoreDetailsHTML = '';
         let typeIcon = '';
+        let onClickHandler = '';
         
         if (record.type === 'quiz') {
             typeIcon = '📝';
@@ -331,13 +345,14 @@ function displayQuizHistory() {
         } else if (record.type === 'lesson') {
             typeIcon = '💻';
             scoreDetailsHTML = `<div class="score-details" style="color: #10b981;">✅ Hoàn Thành</div>`;
+            onClickHandler = `onclick="viewSavedCode('${record.lang}', '${record.lessonId}')" style="cursor: pointer;"`;
         } else if (record.type === 'quest') {
             typeIcon = '🏆';
             scoreDetailsHTML = `<div class="score-details" style="color: #10b981;">✅ Hoàn Thành</div>`;
         }
         
         return `
-            <div class="history-card">
+            <div class="history-card" ${onClickHandler}>
                 <div class="history-header">
                     <span class="history-lang">${langMap[record.lang]}</span>
                     <span class="history-date">${dateStr}</span>
@@ -350,9 +365,40 @@ function displayQuizHistory() {
                     ${scoreDetailsHTML}
                 </div>
                 <div class="history-exp" style="color: #10b981; font-weight: 600;">+${record.expEarned} EXP</div>
+                ${record.type === 'lesson' ? '<div style="margin-top: 8px; font-size: 0.9rem; color: #06b6d4;">👁️ Click để xem code</div>' : ''}
             </div>
         `;
     }).join('');
+}
+
+function viewSavedCode(lang, lessonId) {
+    const savedCode = currentUser.savedCodes?.[lang]?.[lessonId];
+    if (!savedCode) {
+        alert('Không tìm thấy code đã lưu!');
+        return;
+    }
+    
+    const lesson = lessonsDB[lang].find(l => l.id === lessonId);
+    const langNames = { javascript: 'JavaScript', python: 'Python', cpp: 'C++', java: 'Java', csharp: 'C#' };
+    
+    // Hiển thị code viewer
+    document.getElementById('saved-code-lang').innerText = langNames[lang];
+    document.getElementById('saved-code-title').innerText = lesson.title;
+    const saveDate = new Date(savedCode.date);
+    document.getElementById('saved-code-date').innerText = 'Lưu: ' + saveDate.toLocaleDateString('vi-VN') + ' ' + saveDate.toLocaleTimeString('vi-VN');
+    document.getElementById('saved-code-content').innerText = savedCode.code;
+    document.getElementById('saved-code-length').innerText = `${savedCode.codeLength} ký tự`;
+    
+    showView('view-saved-code');
+}
+
+function copySavedCode() {
+    const codeContent = document.getElementById('saved-code-content').innerText;
+    navigator.clipboard.writeText(codeContent).then(() => {
+        alert('✅ Đã copy code vào clipboard!');
+    }).catch(() => {
+        alert('Không thể copy code!');
+    });
 }
 
 function filterQuizHistory() {
@@ -577,6 +623,9 @@ function submitCode() {
             if (!currentUser.stats[currentLangWorkspace].completedLessons.includes(lesson.id)) {
                 currentUser.stats[currentLangWorkspace].completedLessons.push(lesson.id);
                 currentUser.stats[currentLangWorkspace].exp += lesson.expReward;
+                
+                // Lưu code vào kho lưu trữ
+                saveLessonCode(currentLangWorkspace, lesson.id, lesson.title, code);
                 
                 // Lưu lịch sử làm bài tập
                 saveLessonHistory(currentLangWorkspace, lesson.id, lesson.title, lesson.expReward);
