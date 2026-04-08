@@ -312,6 +312,7 @@ function filterQuizHistory() {
 // 5. QUẢN LÝ BIẾN VÀ KHỞI ĐỘNG
 // ==========================================
 
+window.onload = () => {
     editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
         theme: "dracula", lineNumbers: true, autoCloseBrackets: true
     });
