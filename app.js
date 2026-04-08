@@ -237,12 +237,31 @@ function saveQuizHistory(lang, score, correct, incorrect) {
     if (!currentUser.quizHistory[lang]) currentUser.quizHistory[lang] = [];
     
     const historyRecord = {
+        type: 'quiz',
         date: new Date().toISOString(),
         score: score,
         correct: correct,
         incorrect: incorrect,
         percentage: Math.round((correct / (correct + incorrect)) * 100),
-        expEarned: score
+        expEarned: score,
+        title: `Trắc Nghiệm ${langNames[lang]}`
+    };
+    
+    currentUser.quizHistory[lang].push(historyRecord);
+    saveUserProgress();
+}
+
+function saveQuestHistory(lang, questId, questTitle, expEarned) {
+    if (!currentUser.quizHistory) currentUser.quizHistory = {};
+    if (!currentUser.quizHistory[lang]) currentUser.quizHistory[lang] = [];
+    
+    const historyRecord = {
+        type: 'quest',
+        date: new Date().toISOString(),
+        questId: questId,
+        title: questTitle,
+        expEarned: expEarned,
+        percentage: 100
     };
     
     currentUser.quizHistory[lang].push(historyRecord);
@@ -286,17 +305,27 @@ function displayQuizHistory() {
         const dateStr = date.toLocaleDateString('vi-VN') + ' ' + date.toLocaleTimeString('vi-VN');
         const langMap = { javascript: 'JavaScript', python: 'Python', cpp: 'C++', java: 'Java', csharp: 'C#' };
         
+        let scoreDetailsHTML = '';
+        if (record.type === 'quiz') {
+            scoreDetailsHTML = `<div class="score-details">${record.correct}/${record.correct + record.incorrect} câu đúng</div>`;
+        } else if (record.type === 'quest') {
+            scoreDetailsHTML = `<div class="score-details" style="color: #10b981;">✅ Hoàn Thành</div>`;
+        }
+        
         return `
             <div class="history-card">
                 <div class="history-header">
                     <span class="history-lang">${langMap[record.lang]}</span>
                     <span class="history-date">${dateStr}</span>
                 </div>
+                <div class="history-title" style="margin: 10px 0; color: var(--text-main); font-weight: 500;">
+                    ${record.type === 'quiz' ? '📝' : '🎯'} ${record.title || 'Unknown'}
+                </div>
                 <div class="history-score">
                     <div class="score-big">${record.percentage}%</div>
-                    <div class="score-details">${record.correct}/${record.correct + record.incorrect} câu đúng</div>
+                    ${scoreDetailsHTML}
                 </div>
-                <div class="history-exp">+${record.expEarned} EXP</div>
+                <div class="history-exp" style="color: #10b981; font-weight: 600;">+${record.expEarned} EXP</div>
             </div>
         `;
     }).join('');

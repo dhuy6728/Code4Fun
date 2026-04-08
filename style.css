@@ -215,6 +215,19 @@ input:focus, select:focus {
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2), var(--primary-glow);
 }
 
+/* Select options styling */
+select option {
+    background: rgba(10, 14, 39, 0.9);
+    color: var(--text-main);
+    padding: 8px;
+    border: none;
+}
+
+select option:checked {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(236, 72, 153, 0.3));
+    color: var(--text-main);
+}
+
 /* =========================================
    HEADER CHÍNH
    ========================================= */
