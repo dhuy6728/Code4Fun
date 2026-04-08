@@ -375,7 +375,7 @@ function displayQuizHistory() {
 function viewSavedCode(lang, lessonId) {
     const savedCode = currentUser.savedCodes?.[lang]?.[lessonId];
     if (!savedCode) {
-        alert('❌ Không tìm code / Code not found!');
+        alert('❌ Không tìm thấy code đã lưu!');
         return;
     }
     
@@ -396,9 +396,9 @@ function viewSavedCode(lang, lessonId) {
 function copySavedCode() {
     const codeContent = document.getElementById('saved-code-content').innerText;
     navigator.clipboard.writeText(codeContent).then(() => {
-        alert('✅ Sao chép thành công / Copied!');
+        alert('✅ Đã copy code vào clipboard!');
     }).catch(() => {
-        alert('❌ Sao chép thất bại / Copy failed!');
+        alert('❌ Không thể copy code!');
     });
 }
 
@@ -471,14 +471,14 @@ function register() {
     const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value;
 
-    if (!name || !email || !password) return alert("❌ Điền đủ thông tin / Fill all information!");
+    if (!name || !email || !password) return alert("❌ Vui lòng điền đủ thông tin!");
     let users = JSON.parse(localStorage.getItem('code4students_users')) || {};
-if (users[email]) return alert("⚠️ Email đã tồn tại / Email already exists!");
+if (users[email]) return alert("⚠️ Email đã tồn tại!");
 
     users[email] = { email, password, name, stats: {} };
     localStorage.setItem('code4students_users', JSON.stringify(users));
     
-    alert("✅ Đăng ký thành công / Registration successful!");
+    alert("✅ Đăng ký thành công!");
     switchAuthTab('login');
     document.getElementById('login-email').value = email;
 }
@@ -494,7 +494,7 @@ function login() {
         localStorage.setItem('code4students_active_user', email);
         showView('view-dashboard');
         updateDashboard();
-    } else { alert("❌ Sai email/mật khẩu / Wrong email/password!"); }
+    } else { alert("❌ Sai email hoặc mật khẩu!"); }
 }
 
 function logout() {
@@ -517,7 +517,7 @@ function saveUserProgress() {
 }
 
 function updateDashboard() {
-    document.getElementById('user-greeting').innerText = `Chào, ${currentUser.name} / Hello, ${currentUser.name}`;
+    document.getElementById('user-greeting').innerText = `Chào, ${currentUser.name}`;
     
     const container = document.getElementById('language-tracks-container');
     container.innerHTML = '';
@@ -787,7 +787,7 @@ function selectQuizAnswer(index) {
 
 function submitSelectedAnswer() {
     if (quizState.selectedAnswer === -1) {
-        alert('⚠️ Chọn đáp án / Select an answer!');
+        alert('⚠️ Vui lòng chọn một đáp án!');
         return;
     }
     submitQuizAnswer(quizState.selectedAnswer);
@@ -839,7 +839,7 @@ function submitQuizAnswer(answerIndex) {
 
 function updateQuizStats() {
     document.getElementById('quiz-stats').innerText = 
-        `Đúng / Correct: ${quizState.correct} | Sai / Wrong: ${quizState.incorrect} | Điểm / Score: ${Math.round((quizState.correct / (quizState.correct + quizState.incorrect)) * 100)}%`;
+        `Đúng: ${quizState.correct} | Sai: ${quizState.incorrect} | Điểm: ${Math.round((quizState.correct / (quizState.correct + quizState.incorrect)) * 100)}%`;
 }
 
 function showQuizResult() {
@@ -855,20 +855,20 @@ function showQuizResult() {
     let resultMessage = '';
     
     if (percentage === 100) {
-        resultTitle = '🎉 Tuyệt vời / Excellent!';
-        resultMessage = `Đúng hết 5 câu / 5/5 Correct! +${expReward} EXP`;
+        resultTitle = '🎉 TUYỆT VỜI!';
+        resultMessage = `Bạn trả lời đúng cả 5 câu hỏi! Nhận +${expReward} EXP`;
     } else if (percentage >= 80) {
-        resultTitle = '✅ Xuất sắc / Great!';
-        resultMessage = `Điểm / Score: ${percentage}%. +${expReward} EXP`;
+        resultTitle = '✅ XUẤT SẮC!';
+        resultMessage = `Bạn đạt ${percentage}%. Nhận +${expReward} EXP`;
     } else if (percentage >= 60) {
-        resultTitle = '👍 Tốt / Good!';
-        resultMessage = `Điểm / Score: ${percentage}%. +${expReward} EXP`;
+        resultTitle = '👍 TỐT!';
+        resultMessage = `Bạn đạt ${percentage}%. Nhận +${expReward} EXP`;
     } else if (percentage >= 40) {
-        resultTitle = '📚 Cố gắng hơn / Try harder!';
-        resultMessage = `Điểm / Score: ${percentage}%. +${expReward} EXP`;
+        resultTitle = '📚 CỐ GẮNG HƠN NỮA!';
+        resultMessage = `Bạn đạt ${percentage}%. Nhận +${expReward} EXP`;
     } else {
-        resultTitle = '💪 Tiếp tục luyện / Keep practicing!';
-        resultMessage = `Điểm / Score: ${percentage}%.`;
+        resultTitle = '💪 HÃY TIẾP TỤC LUYỆN TẬP!';
+        resultMessage = `Bạn đạt ${percentage}%. Hãy ôn lại lý thuyết và thử lại!`;
     }
     
     document.getElementById('result-title').innerText = resultTitle;
