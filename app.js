@@ -251,6 +251,23 @@ function saveQuizHistory(lang, score, correct, incorrect) {
     saveUserProgress();
 }
 
+function saveLessonHistory(lang, lessonId, lessonTitle, expReward) {
+    if (!currentUser.quizHistory) currentUser.quizHistory = {};
+    if (!currentUser.quizHistory[lang]) currentUser.quizHistory[lang] = [];
+    
+    const historyRecord = {
+        type: 'lesson',
+        date: new Date().toISOString(),
+        lessonId: lessonId,
+        title: `💻 ${lessonTitle}`,
+        expEarned: expReward,
+        percentage: 100
+    };
+    
+    currentUser.quizHistory[lang].push(historyRecord);
+    saveUserProgress();
+}
+
 function saveQuestHistory(lang, questId, questTitle, expEarned) {
     if (!currentUser.quizHistory) currentUser.quizHistory = {};
     if (!currentUser.quizHistory[lang]) currentUser.quizHistory[lang] = [];
@@ -553,6 +570,10 @@ function submitCode() {
             if (!currentUser.stats[currentLangWorkspace].completedLessons.includes(lesson.id)) {
                 currentUser.stats[currentLangWorkspace].completedLessons.push(lesson.id);
                 currentUser.stats[currentLangWorkspace].exp += lesson.expReward;
+                
+                // Lưu lịch sử làm bài tập
+                saveLessonHistory(currentLangWorkspace, lesson.id, lesson.title, lesson.expReward);
+                
                 saveUserProgress();
                 
                 // Kiểm tra nếu hoàn thành 10 bài học
