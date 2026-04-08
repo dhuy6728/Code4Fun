@@ -1,4 +1,4 @@
-// ==========================================
+﻿// ==========================================
 // 1. THÔNG TIN CHI TIẾT VỀ CÁC NGÔN NGỮ LẬP TRÌNH
 // ==========================================
 const languageInfo = {
@@ -148,7 +148,7 @@ const lessonsDB = {
 // 2. CƠ CHẾ TRẮC NGHIỆM - MULTIPLE CHOICE QUIZ
 // ==========================================
 // quizDB (50 câu hỏi cho mỗi ngôn ngữ) được import từ quiz-data.js
-const quizDB_old = {
+const quizDB = {
     javascript: [
         { q: "Câu lệnh nào dùng để in dữ liệu ra console?", a: ["console.log()", "print()", "cout", "System.out.println()"], c: 0 },
         { q: "Khai báo biến trong JS, cái nào được dùng nhiều nhất hiện đại?", a: ["var age = 25", "let age = 25", "const age = 25", "cả B và C đều đúng"], c: 3 },
@@ -1270,3 +1270,4 @@ function showAdaptiveQuestsUnlocked(lang, level) {
           `Bạn có thể bắt đầu các quest ở mức độ ${levelNames[level]} ngay bây giờ!\n\n` +
           `Hoàn thành các quest để nhận EXP và cải thiện kỹ năng.`);
 }
+
