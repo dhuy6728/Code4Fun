@@ -145,9 +145,84 @@ const lessonsDB = {
 };
 
 // ==========================================
-// 2. QUẢN LÝ BIẾN TOÀN CỤC
+// 2. CƠ CHẾ TRẮC NGHIỆM - MULTIPLE CHOICE QUIZ
+// ==========================================
+const quizDB = {
+    javascript: [
+        { q: "Câu lệnh nào dùng để in dữ liệu ra console?", a: ["console.log()", "print()", "cout", "System.out.println()"], c: 0 },
+        { q: "Khai báo biến trong JS, cái nào được dùng nhiều nhất hiện đại?", a: ["var age = 25", "let age = 25", "const age = 25", "cả B và C đều đúng"], c: 3 },
+        { q: "Kết quả của 10 + '5' trong JavaScript là gì?", a: ["15", "105", "Lỗi", "undefined"], c: 1 },
+        { q: "Hàm nào được dùng để kiểm tra độ dài chuỗi?", a: ["length()", ".length", ".size()", ".count()"], c: 1 },
+        { q: "Cú pháp vòng lặp for đúng là?", a: ["for(let i=0 i<5 i++)", "for(let i=0; i<5; i++)", "for i in range(5)", "while(i<5)"], c: 1 },
+        { q: "Array trong JS được khai báo như thế nào?", a: ["let arr = (1,2,3)", "let arr = [1,2,3]", "let arr = {1,2,3}", "let arr = 1,2,3"], c: 1 },
+        { q: "Hàm trong JS bắt đầu bằng từ khóa nào?", a: ["func", "function", "def", "method"], c: 1 },
+        { q: "1 === '1' sẽ trả về gì?", a: ["true", "false", "1", "undefined"], c: 1 },
+        { q: "Để nối chuỗi, ta dùng ký tự nào?", a: ["-", "*", "+", "&"], c: 2 },
+        { q: "undefined có phải là kiểu dữ liệu trong JS không?", a: ["Không", "Có", "Có nhưng hiếm", "Tùy trường hợp"], c: 1 }
+    ],
+    python: [
+        { q: "Hàm nào dùng để in dữ liệu ra console?", a: ["cout", "print()", "System.out.println()", "puts"], c: 1 },
+        { q: "Cú pháp khai báo biến nào đúng?", a: ["int age = 25", "age: int = 25", "age = 25", "var age = 25"], c: 2 },
+        { q: "Cách tạo list trong Python?", a: ["list = (1,2,3)", "list = {1,2,3}", "list = [1,2,3]", "list = 1,2,3"], c: 2 },
+        { q: "Hàm lặp for trong Python dùng từ khóa nào?", a: ["for", "while", "loop", "repeat"], c: 0 },
+        { q: "range(5) sẽ sinh ra dãy số nào?", a: ["1,2,3,4,5", "0,1,2,3,4", "1,2,3,4", "0,1,2,3,4,5"], c: 1 },
+        { q: "Cách lấy độ dài list là?", a: [".length()", "len(list)", ".size()", ".count()"], c: 1 },
+        { q: "Comment trong Python dùng ký tự nào?", a: ["//", "/**/", "#", "--"], c: 2 },
+        { q: "Dictionary trong Python khai báo như thế nào?", a: ["dict = (key: value)", "dict = {key: value}", "dict = [key, value]", "dict = key, value"], c: 1 },
+        { q: "Hàm dùng để kiểm tra kiểu dữ liệu?", a: ["typeof", "isinstance()", "getType()", "checkType()"], c: 1 },
+        { q: "Để tạo hàm, từ khóa nào được dùng?", a: ["function", "fun", "def", "method"], c: 2 }
+    ],
+    cpp: [
+        { q: "Câu lệnh nào dùng để in dữ liệu ra?", a: ["cout", "print()", "printf()", "System.out"], c: 0 },
+        { q: "Để sử dụng cout, phải include gì?", a: ["#include <stdio.h>", "#include <iostream>", "#include <cstdlib>", "#include <vector>"], c: 1 },
+        { q: "KUI khai báo biến trong C++?", a: ["int age = 25;", "int age: 25;", "var age = 25;", "age: int = 25"], c: 0 },
+        { q: "Array trong C++ được khai báo?", a: ["int arr = [1,2,3]", "int arr[3] = {1,2,3}", "array arr = {1,2,3}", "let arr = [1,2,3]"], c: 1 },
+        { q: "Cú pháp vòng lặp for đúng là?", a: ["for i in range(10)", "for(int i=0; i<10; i++)", "for(i<10)", "repeat(10) {"], c: 1 },
+        { q: "Để tạo hàm, cú pháp là?", a: ["func name() {}", "def name():", "type name() {}", "method name() {}"], c: 2 },
+        { q: "String trong C++ phải include gì?", a: ["#include <string>", "#include <cstring>", "#include <stdio.h>", "Không cần"], c: 0 },
+        { q: "Struct dùng để làm gì?", a: ["Khai báo hàm", "Nhóm dữ liệu", "Tạo loop", "Khai báo mảng"], c: 1 },
+        { q: "Vector trong C++ là gì?", a: ["Biến thường", "Mảng động", "Hàm", "Kiểu bool"], c: 1 },
+        { q: "nullptr dùng trong C++ như thế nào?", a: ["Giá trị 0", "Con trỏ rỗng", "Từ khóa", "Lỗi cú pháp"], c: 1 }
+    ],
+    java: [
+        { q: "Câu lệnh in dữ liệu trong Java?", a: ["print()", "cout", "System.out.println()", "printf()"], c: 2 },
+        { q: "Khai báo biến đúng trong Java?", a: ["int age = 25", "age: int = 25", "var age = 25", "age = int 25"], c: 0 },
+        { q: "Array trong Java?", a: ["int[] arr = [1,2,3]", "int arr[] = {1,2,3}", "array arr = {1,2,3}", "List arr = {1,2,3}"], c: 1 },
+        { q: "Vòng lặp for trong Java?", a: ["for i in range(10)", "for(int i=0; i<10; i++)", "for(i<10)", "repeat(10) {"], c: 1 },
+        { q: "Class trong Java bắt đầu bằng?", a: ["class Main {", "Class Main {", "public class Main {", "Cả A và C đúng"], c: 3 },
+        { q: "Method main trong Java?", a: ["public static void main()", "public void main(String[])", "public static void main(String[])", "static main()"], c: 2 },
+        { q: "ArrayList là gì?", a: ["Mảng thường", "Mảng động", "List tĩnh", "Hàm trong java.util"], c: 1 },
+        { q: "Để import một package?", a: ["import java.util", "include java.util", "using java.util", "include <java.util>"], c: 0 },
+        { q: "String immutable trong Java?", a: ["Không", "Có", "Tùy trường hợp", "Chỉ khi được khởi tạo"], c: 1 },
+        { q: "new từ khóa dùng để?", a: ["Tạo biến", "Tạo object", "Import class", "Khai báo hàm"], c: 1 }
+    ],
+    csharp: [
+        { q: "Hàm in dữ liệu trong C#?", a: ["print()", "cout", "Console.WriteLine()", "printf()"], c: 2 },
+        { q: "Khai báo biến C#?", a: ["int age = 25", "age: int = 25", "var age = 25", "Cả A và C"], c: 3 },
+        { q: "Array trong C#?", a: ["int[] arr = [1,2,3]", "int arr[] = new int[3]", "array arr = {1,2,3}", "List<int> arr = {1,2,3}"], c: 1 },
+        { q: "For loop trong C#?", a: ["for i in range(10)", "for(int i=0; i<10; i++)", "for(i<10)", "repeat 10"], c: 1 },
+        { q: "List trong C# là gì?", a: ["Array cố định", "Array động", "Hàm", "Namespace"], c: 1 },
+        { q: "Namespace dùng để?", a: ["Import class", "Nhóm code", "Khai báo hàm", "Tạo biến"], c: 1 },
+        { q: "Property trong C#?", a: ["Biến public", "Biến với getter/setter", "Hàm", "Constant"], c: 1 },
+        { q: "async/await là gì?", a: ["Vòng lặp", "Lập trình không đồng bộ", "Khai báo hàm", "Điều kiện"], c: 1 },
+        { q: "LINQ là gì?", a: ["Namespace", "Phương pháp truy vấn dữ liệu", "Type dữ liệu", "Hàm"], c: 1 },
+        { q: "Nullable type trong C#?", a: ["Biến có thể null", "Biến không thể null", "Biến kiểu Integer", "Biến tĩnh"], c: 0 }
+    ]
+};
+
+// ==========================================
+// 3. QUẢN LÝ BIẾN TOÀN CỤC
 // ==========================================
 let currentUser = null;
+let quizState = {
+    currentLang: null,
+    questions: [],
+    currentIndex: 0,
+    usedQuestions: new Set(),
+    correct: 0,
+    incorrect: 0,
+    correctQuestions: []
+};
 let currentLangWorkspace = null;
 let currentLessonId = null;
 let editor;
@@ -262,10 +337,10 @@ function updateDashboard() {
         let lessonTitleHTML = '';
         if (availableLesson) {
              lessonTitleHTML = `<strong>Bài tiếp theo:</strong> ${availableLesson.title}`;
-             actionHTML = `<div style="display: flex; gap: 10px;"><button onclick="viewLanguageOverview('${lang}')" class="btn-outline" style="flex: 1;">Tổng Quan</button><button onclick="startLesson('${lang}', '${availableLesson.id}')" class="btn-primary" style="flex: 1;">Vào Học</button></div>`;
+             actionHTML = `<div style="display: flex; gap: 10px;"><button onclick="viewLanguageOverview('${lang}')" class="btn-outline" style="flex: 1;">Tổng Quan</button><button onclick="startQuiz('${lang}')" class="btn-outline" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">Trắc Nghiệm 📝</button><button onclick="startLesson('${lang}', '${availableLesson.id}')" class="btn-primary" style="flex: 1;">Vào Học</button></div>`;
         } else {
              lessonTitleHTML = `<strong style="color: var(--success-color)">🎉 Đã hoàn thành mọi bài học!</strong>`;
-             actionHTML = `<div style="display: flex; gap: 10px;"><button onclick="viewLanguageOverview('${lang}')" class="btn-outline" style="flex: 1;">Tổng Quan</button><button disabled class="btn-outline" style="flex: 1;">Chờ bài mới...</button></div>`;
+             actionHTML = `<div style="display: flex; gap: 10px;"><button onclick="viewLanguageOverview('${lang}')" class="btn-outline" style="flex: 1;">Tổng Quan</button><button onclick="startQuiz('${lang}')" class="btn-outline" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">Trắc Nghiệm 📝</button></div>`;
         }
 
         const cardHTML = `<div class="track-card"><div class="track-header"><div class="track-title">${langNames[lang]}</div><div class="track-stats"><span class="stat-badge stat-level">Cấp ${level}</span><span class="stat-badge">${stats.exp} EXP</span><span class="stat-badge stat-error">Sai: ${stats.errors} lần</span></div></div><div class="track-body"><div class="progress-bar"><div class="progress-fill" style="width: ${progressPercent}%"></div></div><div class="track-footer"><div class="lesson-info">${lessonTitleHTML}</div>${actionHTML}</div></div></div>`;
@@ -389,4 +464,167 @@ function viewLanguageOverview(lang) {
     document.getElementById('btn-start-learning').onclick = () => startLesson(lang, firstAvailableLesson.id);
     
     showView('view-language-overview');
+}
+
+// ==========================================
+// QUIZ FUNCTIONS
+// ==========================================
+function startQuiz(lang) {
+    quizState.currentLang = lang;
+    quizState.questions = [];
+    quizState.currentIndex = 0;
+    quizState.usedQuestions = new Set();
+    quizState.correct = 0;
+    quizState.incorrect = 0;
+    quizState.correctQuestions = [];
+    
+    // Lấy 5 câu hỏi ngẫu nhiên không lặp lại
+    const allQuestions = quizDB[lang];
+    const totalQuestions = Math.min(5, allQuestions.length);
+    
+    while (quizState.questions.length < totalQuestions) {
+        const randomIndex = Math.floor(Math.random() * allQuestions.length);
+        if (!quizState.usedQuestions.has(randomIndex)) {
+            quizState.usedQuestions.add(randomIndex);
+            quizState.questions.push(allQuestions[randomIndex]);
+        }
+    }
+    
+    document.getElementById('quiz-lang-name').innerText = langNames[lang];
+    showView('view-quiz');
+    showQuizQuestion();
+}
+
+function showQuizQuestion() {
+    const questionIndex = quizState.currentIndex;
+    if (questionIndex >= quizState.questions.length) {
+        showQuizResult();
+        return;
+    }
+    
+    const question = quizState.questions[questionIndex];
+    const progressPercent = ((questionIndex + 1) / quizState.questions.length) * 100;
+    
+    document.getElementById('quiz-counter').innerText = `${questionIndex + 1}`;
+    document.getElementById('quiz-progress-bar').style.width = progressPercent + '%';
+    document.getElementById('question-text').innerText = question.q;
+    document.getElementById('quiz-result').classList.add('hidden');
+    document.getElementById('question-container').classList.remove('hidden');
+    
+    const answersContainer = document.getElementById('answers-container');
+    answersContainer.innerHTML = '';
+    
+    question.a.forEach((answer, index) => {
+        const answerBtn = document.createElement('button');
+        answerBtn.classList.add('quiz-answer-btn');
+        answerBtn.style.cssText = `
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-weight: 500;
+        `;
+        answerBtn.innerText = String.fromCharCode(65 + index) + '. ' + answer;
+        answerBtn.onmouseover = () => { answerBtn.style.borderColor = 'var(--primary-color)'; answerBtn.style.background = '#f0f4f8'; };
+        answerBtn.onmouseout = () => { answerBtn.style.borderColor = 'var(--border-color)'; answerBtn.style.background = 'white'; };
+        answerBtn.onclick = () => submitQuizAnswer(index);
+        answersContainer.appendChild(answerBtn);
+    });
+}
+
+function submitQuizAnswer(answerIndex) {
+    const question = quizState.questions[quizState.currentIndex];
+    const buttons = document.querySelectorAll('.quiz-answer-btn');
+    
+    // Vô hiệu hóa tất cả các nút
+    buttons.forEach(btn => { btn.style.pointerEvents = 'none'; });
+    
+    if (answerIndex === question.c) {
+        quizState.correct++;
+        quizState.correctQuestions.push({
+            q: question.q,
+            correct: true
+        });
+        buttons[answerIndex].style.backgroundColor = '#4CAF50';
+        buttons[answerIndex].style.borderColor = '#4CAF50';
+        buttons[answerIndex].style.color = 'white';
+    } else {
+        quizState.incorrect++;
+        quizState.correctQuestions.push({
+            q: question.q,
+            correct: false,
+            userAnswer: question.a[answerIndex],
+            correctAnswer: question.a[question.c]
+        });
+        buttons[answerIndex].style.backgroundColor = '#EF4444';
+        buttons[answerIndex].style.borderColor = '#EF4444';
+        buttons[answerIndex].style.color = 'white';
+        buttons[question.c].style.backgroundColor = '#4CAF50';
+        buttons[question.c].style.borderColor = '#4CAF50';
+        buttons[question.c].style.color = 'white';
+    }
+    
+    updateQuizStats();
+    
+    setTimeout(() => {
+        quizState.currentIndex++;
+        if (quizState.currentIndex < quizState.questions.length) {
+            showQuizQuestion();
+        } else {
+            showQuizResult();
+        }
+    }, 2000);
+}
+
+function updateQuizStats() {
+    document.getElementById('quiz-stats').innerText = 
+        `Đúng: ${quizState.correct} | Sai: ${quizState.incorrect} | Diểm: ${Math.round((quizState.correct / (quizState.correct + quizState.incorrect)) * 100)}%`;
+}
+
+function showQuizResult() {
+    document.getElementById('question-container').classList.add('hidden');
+    document.getElementById('quiz-result').classList.remove('hidden');
+    
+    const totalQuestions = quizState.questions.length;
+    const correct = quizState.correct;
+    const percentage = Math.round((correct / totalQuestions) * 100);
+    const expReward = Math.floor((correct / totalQuestions) * 100);
+    
+    let resultTitle = '';
+    let resultMessage = '';
+    
+    if (percentage === 100) {
+        resultTitle = '🎉 TUYỆT VỜI!';
+        resultMessage = `Bạn trả lời đúng cả 5 câu hỏi! Nhận +${expReward} EXP`;
+    } else if (percentage >= 80) {
+        resultTitle = '✅ XUẤT SẮC!';
+        resultMessage = `Bạn đạt ${percentage}%. Nhận +${expReward} EXP`;
+    } else if (percentage >= 60) {
+        resultTitle = '👍 TỐT!';
+        resultMessage = `Bạn đạt ${percentage}%. Nhận +${expReward} EXP`;
+    } else if (percentage >= 40) {
+        resultTitle = '📚 CỐ GẮNG HƠN NỮA!';
+        resultMessage = `Bạn đạt ${percentage}%. Nhận +${expReward} EXP`;
+    } else {
+        resultTitle = '💪 HÃYTIẾP TỤC LUYỆN TẬP!';
+        resultMessage = `Bạn đạt ${percentage}%. Hãy ôn lại lý thuyết và thử lại!`;
+    }
+    
+    document.getElementById('result-title').innerText = resultTitle;
+    document.getElementById('result-message').innerText = resultMessage;
+    
+    // Cộng EXP cho người dùng
+    if (expReward > 0) {
+        currentUser.stats[quizState.currentLang].exp += expReward;
+        saveUserProgress();
+    }
+}
+
+function finishQuiz() {
+    showView('view-dashboard');
+    updateDashboard();
 }
