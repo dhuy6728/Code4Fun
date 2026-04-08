@@ -898,21 +898,23 @@ input:focus, select:focus {
 }
 
 .btn-back {
-    background: white;
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
-    padding: 10px 20px;
-    border-radius: 6px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    transition: all var(--transition-fast);
     margin-bottom: 20px;
 }
 
 .btn-back:hover {
-    background: var(--primary-light);
-    border-color: var(--primary-color);
     color: var(--primary-color);
+    transform: translateX(-3px);
+    text-shadow: var(--primary-glow);
 }
 
 /* Responsive Design */
