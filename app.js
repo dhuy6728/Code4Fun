@@ -366,7 +366,12 @@ function displayQuizHistory() {
                     ${scoreDetailsHTML}
                 </div>
                 <div class="history-exp" style="color: #10b981; font-weight: 600;">+${record.expEarned} EXP</div>
-                ${record.type === 'lesson' ? '<div style="margin-top: 8px; font-size: 0.9rem; color: #06b6d4;">👁️ Click để xem code</div>' : ''}
+                ${record.type === 'lesson' ? `
+                    <div style="margin-top: 12px; display: flex; gap: 10px; font-size: 0.9rem;">
+                        <button type="button" onclick="viewSavedCode('${record.lang}', '${record.lessonId}')" style="flex: 1; padding: 8px; border: 1px solid #06b6d4; background: rgba(6, 182, 212, 0.1); color: #06b6d4; border-radius: 4px; cursor: pointer; font-weight: 500;">👁️ Xem Code</button>
+                        <button type="button" onclick="redoLesson('${record.lang}', '${record.lessonId}')" style="flex: 1; padding: 8px; border: 1px solid #10b981; background: rgba(16, 185, 129, 0.1); color: #10b981; border-radius: 4px; cursor: pointer; font-weight: 500;">🔄 Làm Lại</button>
+                    </div>
+                ` : ''}
             </div>
         `;
     }).join('');
@@ -382,6 +387,10 @@ function viewSavedCode(lang, lessonId) {
     const lesson = lessonsDB[lang].find(l => l.id === lessonId);
     const langNames = { javascript: 'JavaScript', python: 'Python', cpp: 'C++', java: 'Java', csharp: 'C#' };
     
+    // Lưu thông tin lesson để dùng cho nút Redo
+    window.currentViewedLang = lang;
+    window.currentViewedLessonId = lessonId;
+    
     // Hiển thị code viewer
     document.getElementById('saved-code-lang').innerText = langNames[lang];
     document.getElementById('saved-code-title').innerText = lesson.title;
@@ -389,6 +398,9 @@ function viewSavedCode(lang, lessonId) {
     document.getElementById('saved-code-date').innerText = 'Lưu: ' + saveDate.toLocaleDateString('vi-VN') + ' ' + saveDate.toLocaleTimeString('vi-VN');
     document.getElementById('saved-code-content').innerText = savedCode.code;
     document.getElementById('saved-code-length').innerText = `${savedCode.codeLength} ký tự`;
+    
+    // Cập nhật Button Redo
+    document.getElementById('btn-redo-lesson').onclick = () => redoLesson(lang, lessonId);
     
     showView('view-saved-code');
 }
@@ -612,6 +624,11 @@ function startLesson(lang, lessonId) {
     
     showView('view-workspace');
     setTimeout(() => editor.refresh(), 100);
+}
+
+function redoLesson(lang, lessonId) {
+    console.log('redoLesson called:', { lang, lessonId });
+    startLesson(lang, lessonId);
 }
 
 function startPracticeMode() {
