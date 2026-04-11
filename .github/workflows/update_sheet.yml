@@ -25,5 +25,5 @@ jobs:
               }
             ]
         env:
-          GSHEET_CLIENT_EMAIL: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }} # Bạn có thể tạo thêm secret này hoặc dán trực tiếp email
+          GSHEET_CLIENT_EMAIL: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
           GSHEET_PRIVATE_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
