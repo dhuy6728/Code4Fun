@@ -14,13 +14,15 @@ jobs:
         uses: jroehl/gsheet.action@release  # Thay v2 bằng release
         with:
           spreadsheetId: ${{ secrets.GOOGLE_SHEET_ID }}
-          commands: | # Ví dụ: Ghi tên commit và thời gian vào Sheet1
+          commands: |
             [
               { 
                 "command": "appendData", 
                 "args": { 
                   "worksheetTitle": "Sheet1", 
-                  "data": [["${{ github.event.head_commit.message }}", "${{ github.sha }}", "${{ github.event.head_commit.timestamp }}"]]
+                  "data": [["${{ github.event.head_commit.message }}", "${{ github.sha }}", "${{ github.event.head_commit.timestamp }}"]],
+                  "minCol": 1,
+                  "valueInputOption": "USER_ENTERED"
                 } 
               }
             ]
