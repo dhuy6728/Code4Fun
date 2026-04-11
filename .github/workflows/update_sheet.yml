@@ -1,0 +1,29 @@
+name: Update Google Sheet
+on:
+  push:
+    branches: [ main ] # Chạy mỗi khi bạn push code lên branch main
+
+jobs:
+  update-sheet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Write to Google Sheet
+        uses: jroehl/gsheet.action@v2
+        with:
+          spreadsheetId: ${{ secrets.GOOGLE_SHEET_ID }}
+          commands: | # Ví dụ: Ghi tên commit và thời gian vào Sheet1
+            [
+              { 
+                "command": "appendData", 
+                "args": { 
+                  "worksheetTitle": "Sheet1", 
+                  "data": [["${{ github.event.head_commit.message }}", "${{ github.sha }}", "${{ github.event.head_commit.timestamp }}"]]
+                } 
+              }
+            ]
+        env:
+          GSHEET_CLIENT_EMAIL: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }} # Bạn có thể tạo thêm secret này hoặc dán trực tiếp email
+          GSHEET_PRIVATE_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
