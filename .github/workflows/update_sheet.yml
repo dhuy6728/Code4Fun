@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Write to Google Sheet
-        uses: jroehl/gsheet.action@v2
+        uses: jroehl/gsheet.action@release  # Thay v2 bằng release
         with:
           spreadsheetId: ${{ secrets.GOOGLE_SHEET_ID }}
           commands: | # Ví dụ: Ghi tên commit và thời gian vào Sheet1
